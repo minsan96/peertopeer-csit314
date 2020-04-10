@@ -14,5 +14,5 @@ Prerequisites
 
 * If you do have Visual Studio and SSMS, open Package Manager Console in Tools > NuGet Package Manager and run the command *Update-Database*. 
 
-Current BackEnd API UI
-![Current BackEnd API UI](/images/backend.png)
+Current BackEnd API
+![Current BackEnd API](/images/backend.png)
