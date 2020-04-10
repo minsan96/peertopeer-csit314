@@ -1,6 +1,6 @@
 # Peer To Peer Learning CSIT-314
 
-# Notes
+**Notes**
 
 Prerequisites
 1. Download .NET Core 2.2 from https://dotnet.microsoft.com/download/dotnet-core/2.2. 
