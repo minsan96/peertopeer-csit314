@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using BackEnd.Data;
 
 namespace BackEnd.Data
 {
@@ -10,5 +11,9 @@ namespace BackEnd.Data
         }
 
         public DbSet<Users> Users { get; set; }
+
+        public DbSet<BackEnd.Data.Questions> Questions { get; set; }
+
+        public DbSet<BackEnd.Data.Comments> Comments { get; set; }
     }
 }
