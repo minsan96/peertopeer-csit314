@@ -15,5 +15,7 @@ namespace BackEnd.Data
         public DbSet<BackEnd.Data.Questions> Questions { get; set; }
 
         public DbSet<BackEnd.Data.Comments> Comments { get; set; }
+
+        public DbSet<BackEnd.Data.Answers> Answers { get; set; }
     }
 }

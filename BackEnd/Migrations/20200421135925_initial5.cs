@@ -4,10 +4,19 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BackEnd.Migrations
 {
-    public partial class Initial4 : Migration
+    public partial class initial5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "MarkAsAnswer",
+                table: "Comments");
+
+            migrationBuilder.RenameColumn(
+                name: "QuestionID",
+                table: "Comments",
+                newName: "AnswerID");
+
             migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
@@ -17,13 +26,12 @@ namespace BackEnd.Migrations
                     QuestionID = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Rating = table.Column<int>(nullable: false),
-                    MarkAsAnswer = table.Column<bool>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.ID);
+                    table.PrimaryKey("PK_Answers", x => x.ID);
                 });
         }
 
@@ -31,6 +39,17 @@ namespace BackEnd.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Answers");
+
+            migrationBuilder.RenameColumn(
+                name: "AnswerID",
+                table: "Comments",
+                newName: "QuestionID");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "MarkAsAnswer",
+                table: "Comments",
+                nullable: false,
+                defaultValue: false);
         }
     }
 }
