@@ -53,10 +53,34 @@ namespace FrontEnd.Pages
                 return Page();
             }
             var jsonuser = JsonConvert.SerializeObject(login);
+            await this.SignInUser(login.UserName, false);
             Response.Cookies.Append("CurrentUser", jsonuser, new CookieOptions() {
                 Expires = DateTime.Now.AddMinutes(30)
             });
             return RedirectToPage("Index");
+        }
+
+        private async Task SignInUser(string username, bool isPersistent)
+        {
+            // Initialization.  
+            var claims = new List<Claim>();
+
+            try
+            {
+                // Setting  
+                claims.Add(new Claim(ClaimTypes.Name, username));
+                var claimIdenties = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimPrincipal = new ClaimsPrincipal(claimIdenties);
+                var authenticationManager = Request.HttpContext;
+
+                // Sign In.  
+                await authenticationManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, new AuthenticationProperties() { IsPersistent = isPersistent });
+            }
+            catch (Exception ex)
+            {
+                // Info  
+                throw ex;
+            }
         }
     }
 }

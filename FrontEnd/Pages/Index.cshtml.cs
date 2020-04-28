@@ -19,6 +19,22 @@ namespace FrontEnd.Pages
         {
             _apiClient = apiClient;
         }
+        public IActionResult OnGet()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Home Page.  
+                return RedirectToPage("/Login");
+            }
+
+            if (Request.Cookies["CurrentUser"] == null || string.IsNullOrEmpty(Request.Cookies["CurrentUser"]))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            // Info.  
+            return Page();
+        }
 
         public IActionResult OnPostFindUser()
         {
