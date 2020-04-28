@@ -32,6 +32,7 @@ namespace FrontEnd.Pages
                 return RedirectToPage("/Login");
             }
 
+            _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
             // Info.  
             return Page();
         }
@@ -42,7 +43,6 @@ namespace FrontEnd.Pages
             {
                 return new JsonResult("User not found!");
             }
-            _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
             return new JsonResult("Founded user");
         }
     }
