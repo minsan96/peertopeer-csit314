@@ -1,10 +1,26 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: 'POST',
+                url: 'Index/?handler=FindUser',
+                success: function (data) {
+                    if (data.indexOf("not found") != -1) {
+                        alert("Please Login!");
+                        setTimeout(function () { window.location.href = "/Login"; }, 1000);
+                    }
+                    //success
+                },
+                error: function (error) {
+                    console.log("Error: " + error);
+                }
+            })
+        });
+    </script>
+}
+@Html.AntiForgeryToken()
