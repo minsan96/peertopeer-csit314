@@ -138,7 +138,7 @@ input:focus ~ .highlight {
 
 /* Animations */
 
-@@keyframes inputHighlighter {
+@keyframes inputHighlighter {
     from {
         background: #4a89dc;
     }
@@ -223,7 +223,7 @@ input:focus ~ .highlight {
 
 /* Ripples animation */
 
-@@keyframes ripples {
+@keyframes ripples {
     0% {
         opacity: 0;
     }

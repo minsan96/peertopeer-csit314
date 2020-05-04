@@ -1,0 +1,47 @@
+﻿@page
+@model FrontEnd.Pages.SignUpModel
+@{
+    ViewData["Title"] = "SignUp";
+}
+@section scripts
+    {
+    <link rel="stylesheet" href="~/css/signup.css" />
+}
+
+<h1>Sign Up</h1>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="container">
+        <div class="row">
+            <h4>Account</h4>
+            <div class="input-group input-group-icon">
+                <input asp-for="User.FirstName" type="text" placeholder="First Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="User.LastName" type="text" placeholder="Last Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="User.UserName" type="text" placeholder="UserName" />
+                <div class="input-icon"><i class="fa fa-user"></i></div>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="User.Password" type="password" placeholder="Password" />
+                <div class="input-icon"><i class="fa fa-key"></i></div>
+            </div>
+        </div>
+        <button type="submit" class="button buttonBlue">
+            Sign Up
+            <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+        </button>
+        @if (ViewData["Message"] != null)
+        {
+        <p class="text-success">@ViewData["Message"]&#33; <a asp-area="" asp-page="/Login">Login</a></p>
+
+        }
+    </div>
+    @Html.AntiForgeryToken()
+</form>
