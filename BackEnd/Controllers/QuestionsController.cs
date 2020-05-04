@@ -41,6 +41,34 @@ namespace BackEnd.Controllers
             return questions;
         }
 
+        // GET: api/Questions/5
+        [HttpGet("{userid}")]
+        public async Task<ActionResult<IEnumerable<Questions>>> GetQuestionsByUser(int userid)
+        {
+            var questions = await _context.Questions.Where(e => e.CreatedBy == userid).ToListAsync();
+
+            if (questions == null)
+            {
+                return NotFound();
+            }
+
+            return questions;
+        }
+
+        // GET: api/Questions/5
+        [HttpGet("{keyword}")]
+        public async Task<ActionResult<IEnumerable<Questions>>> SearchQuestions(string keyword)
+        {
+            var questions = await _context.Questions.Where(e => e.Description.Contains(keyword) || e.Question.Contains(keyword)).ToListAsync();
+
+            if (questions == null)
+            {
+                return NotFound();
+            }
+
+            return questions;
+        }
+
         // PUT: api/Questions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutQuestions(int id, Questions questions)
@@ -96,6 +124,43 @@ namespace BackEnd.Controllers
             await _context.SaveChangesAsync();
 
             return questions;
+        }
+
+        // PUT: api/Questions/5/upvote
+        [HttpPut("{id}/upvote")]
+        public async Task<IActionResult> UpvoteQuestions(int id)
+        {
+            var questions = await _context.Questions.FindAsync(id);
+            if (questions == null)
+            {
+                return NotFound();
+            }
+            if (id != questions.ID)
+            {
+                return BadRequest();
+            }
+
+            questions.Rating = questions.Rating + 1;
+
+            _context.Entry(questions).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!QuestionsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         private bool QuestionsExists(int id)

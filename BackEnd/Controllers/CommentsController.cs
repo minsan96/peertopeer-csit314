@@ -41,6 +41,34 @@ namespace BackEnd.Controllers
             return comments;
         }
 
+        // GET: api/Comments/5/user
+        [HttpGet("{userid}/user")]
+        public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByUser(int userid)
+        {
+            var comments = await _context.Comments.Where(e => e.CreatedBy == userid).ToListAsync();
+
+            if (comments == null)
+            {
+                return NotFound();
+            }
+
+            return comments;
+        }
+
+        // GET: api/Comments/5/answer
+        [HttpGet("{answerid}/answer")]
+        public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByAnswer(int answerid)
+        {
+            var comments = await _context.Comments.Where(e => e.AnswerID == answerid).ToListAsync();
+
+            if (comments == null)
+            {
+                return NotFound();
+            }
+
+            return comments;
+        }
+
         // PUT: api/Comments/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComments(int id, Comments comments)
@@ -96,6 +124,43 @@ namespace BackEnd.Controllers
             await _context.SaveChangesAsync();
 
             return comments;
+        }
+
+        // PUT: api/Comments/5/upvote
+        [HttpPut("{id}/upvote")]
+        public async Task<IActionResult> UpvoteComments(int id)
+        {
+            var comments = await _context.Comments.FindAsync(id);
+            if (comments == null)
+            {
+                return NotFound();
+            }
+            if (id != comments.ID)
+            {
+                return BadRequest();
+            }
+
+            comments.Rating = comments.Rating + 1;
+
+            _context.Entry(comments).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CommentsExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         private bool CommentsExists(int id)

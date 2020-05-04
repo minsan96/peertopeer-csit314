@@ -41,6 +41,48 @@ namespace BackEnd.Controllers
             return answers;
         }
 
+        // GET: api/Answers/5
+        [HttpGet("{userid}")]
+        public async Task<ActionResult<IEnumerable<Answers>>> GetAnswersByUser(int userid)
+        {
+            var answers = await _context.Answers.Where(e => e.CreatedBy == userid).ToListAsync();
+
+            if (answers == null)
+            {
+                return NotFound();
+            }
+
+            return answers;
+        }
+
+        // GET: api/Answers/5
+        [HttpGet("{questionid}")]
+        public async Task<ActionResult<IEnumerable<Answers>>> GetAnswersByQuestion(int questionid)
+        {
+            var answers = await _context.Answers.Where(e => e.QuestionID == questionid).ToListAsync();
+
+            if (answers == null)
+            {
+                return NotFound();
+            }
+
+            return answers;
+        }
+
+        // GET: api/Questions/5
+        [HttpGet("{keyword}")]
+        public async Task<ActionResult<IEnumerable<Answers>>> SearchAnswers(string keyword)
+        {
+            var answers = await _context.Answers.Where(e => e.Description.Contains(keyword)).ToListAsync();
+
+            if (answers == null)
+            {
+                return NotFound();
+            }
+
+            return answers;
+        }
+
         // PUT: api/Answers/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAnswers(int id, Answers answers)
@@ -96,6 +138,43 @@ namespace BackEnd.Controllers
             await _context.SaveChangesAsync();
 
             return answers;
+        }
+
+        // PUT: api/Answers/5/upvote
+        [HttpPut("{id}/upvote")]
+        public async Task<IActionResult> UpvoteAnswers(int id)
+        {
+            var answers = await _context.Answers.FindAsync(id);
+            if (answers == null)
+            {
+                return NotFound();
+            }
+            if (id != answers.ID)
+            {
+                return BadRequest();
+            }
+
+            answers.Rating = answers.Rating + 1;
+
+            _context.Entry(answers).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AnswersExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         private bool AnswersExists(int id)
