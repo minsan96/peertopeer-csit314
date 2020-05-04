@@ -8,3 +8,9 @@
         @Html.AntiForgeryToken()
     </form>
 </div>
+<div class="row">
+    <h4> Welcome @Model._currentUser.FirstName @Model._currentUser.LastName</h4>
+</div>
+<div class="row" style="padding-top:20px">
+    <h4> Your Last login : @Model._currentUser.LastLogin  </h4>
+</div>

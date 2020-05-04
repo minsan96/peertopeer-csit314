@@ -1,0 +1,64 @@
+﻿@page
+@model FrontEnd.Pages.QPages.IndexModel
+
+<p>
+    <a asp-page="Create">Post new question</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Question)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@{ int i = 0;}        
+@foreach (var item in Model.Questions) {
+    
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Question)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.CreatorNames[i])
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @if (@item.CreatedBy == @Model._currentUser.ID)
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <span> | </span>
+                }
+                <a asp-page="./Details" asp-route-id="@item.ID">View</a>
+                @if (@item.CreatedBy == @Model._currentUser.ID)
+                {
+                    <span> | </span>
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                }
+                </td>
+        </tr>
+    { i++; }
+}
+    </tbody>
+</table>
