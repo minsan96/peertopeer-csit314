@@ -42,7 +42,7 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Answers/5
-        [HttpGet("{userid}")]
+        [HttpGet("{userid}/userid")]
         public async Task<ActionResult<IEnumerable<Answers>>> GetAnswersByUser(int userid)
         {
             var answers = await _context.Answers.Where(e => e.CreatedBy == userid).ToListAsync();
@@ -56,7 +56,7 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Answers/5
-        [HttpGet("{questionid}")]
+        [HttpGet("{questionid}/questionid")]
         public async Task<ActionResult<IEnumerable<Answers>>> GetAnswersByQuestion(int questionid)
         {
             var answers = await _context.Answers.Where(e => e.QuestionID == questionid).ToListAsync();
@@ -70,7 +70,7 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Questions/5
-        [HttpGet("{keyword}")]
+        [HttpGet("{keyword}/search")]
         public async Task<ActionResult<IEnumerable<Answers>>> SearchAnswers(string keyword)
         {
             var answers = await _context.Answers.Where(e => e.Description.Contains(keyword)).ToListAsync();

@@ -42,7 +42,7 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Questions/5
-        [HttpGet("{userid}")]
+        [HttpGet("{userid}/userid")]
         public async Task<ActionResult<IEnumerable<Questions>>> GetQuestionsByUser(int userid)
         {
             var questions = await _context.Questions.Where(e => e.CreatedBy == userid).ToListAsync();
@@ -56,10 +56,10 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Questions/5
-        [HttpGet("{keyword}")]
+        [HttpGet("{keyword}/search")]
         public async Task<ActionResult<IEnumerable<Questions>>> SearchQuestions(string keyword)
         {
-            var questions = await _context.Questions.Where(e => e.Description.Contains(keyword) || e.Question.Contains(keyword)).ToListAsync();
+            var questions = await _context.Questions.Where(e => e.Question.Contains(keyword)).ToListAsync();
 
             if (questions == null)
             {

@@ -42,7 +42,7 @@ namespace BackEnd.Controllers
         }
 
         // GET: api/Comments/5/user
-        [HttpGet("{userid}/user")]
+        [HttpGet("{userid}/userid")]
         public async Task<ActionResult<IEnumerable<Comments>>> GetCommentsByUser(int userid)
         {
             var comments = await _context.Comments.Where(e => e.CreatedBy == userid).ToListAsync();
