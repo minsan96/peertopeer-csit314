@@ -16,6 +16,12 @@ namespace FrontEnd.Services
         Task<bool> PostQuestions(Questions users);
 
         Task DeleteQuestions(int id);
+
+        Task<List<Questions>> GetQuestionsByUserId(int userid);
+
+        Task<List<Questions>> SearchQuestions(string keyword);
+
+        Task UpvoteQuestions(int id);
         #endregion
 
         #region Answers
@@ -28,6 +34,14 @@ namespace FrontEnd.Services
         Task<bool> PostAnswers(Answers users);
 
         Task DeleteAnswers(int id);
+
+        Task<List<Answers>> GetAnswersByUserId(int userid);
+
+        Task<List<Answers>> GetAnswersByQuestionId(int questionid);
+
+        Task<List<Answers>> SearchAnswers(string keyword);
+
+        Task UpvoteAnswers(int id);
         #endregion
 
         #region Comments
@@ -40,6 +54,14 @@ namespace FrontEnd.Services
         Task<bool> PostComments(Comments comments);
 
         Task DeleteComments(int id);
+
+        Task<List<Comments>> GetCommentsByUserId(int userid);
+
+        Task<List<Comments>> GetCommentsByAnswerId(int answerid);
+
+        Task<List<Comments>> SearchComments(string keyword);
+
+        Task UpvoteComments(int id);
         #endregion
 
         #region Users

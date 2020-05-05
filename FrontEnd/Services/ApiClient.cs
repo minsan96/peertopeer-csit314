@@ -73,6 +73,41 @@ namespace FrontEnd.Services
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<Questions>> GetQuestionsByUserId(int userid)
+        {
+            var response = await _httpClient.GetAsync($"/api/Questions/{userid}/userid");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Questions>>();
+        }
+
+        public async Task<List<Questions>> SearchQuestions(string keyword)
+        {
+            var response = await _httpClient.GetAsync($"/api/Questions/{keyword}/search");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Questions>>();
+        }
+
+        public async Task UpvoteQuestions(int id)
+        {
+            var response = await _httpClient.PutAsync($"/api/Questions/{id}", null);
+
+            response.EnsureSuccessStatusCode();
+        }
         #endregion
 
         #region Answers
@@ -131,6 +166,55 @@ namespace FrontEnd.Services
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<Answers>> GetAnswersByUserId(int userid)
+        {
+            var response = await _httpClient.GetAsync($"/api/Answers/{userid}/userid");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Answers>>();
+        }
+
+        public async Task<List<Answers>> GetAnswersByQuestionId(int questionid)
+        {
+            var response = await _httpClient.GetAsync($"/api/Answers/{questionid}/questionid");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Answers>>();
+        }
+
+        public async Task<List<Answers>> SearchAnswers(string keyword)
+        {
+            var response = await _httpClient.GetAsync($"/api/Answers/{keyword}/search");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Answers>>();
+        }
+
+        public async Task UpvoteAnswers(int id)
+        {
+            var response = await _httpClient.PutAsync($"/api/Answers/{id}", null);
+
+            response.EnsureSuccessStatusCode();
+        }
         #endregion
 
         #region Comments
@@ -186,6 +270,55 @@ namespace FrontEnd.Services
             {
                 return;
             }
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<Comments>> GetCommentsByUserId(int userid)
+        {
+            var response = await _httpClient.GetAsync($"/api/Comments/{userid}/userid");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Comments>>();
+        }
+
+        public async Task<List<Comments>> GetCommentsByAnswerId(int answerid)
+        {
+            var response = await _httpClient.GetAsync($"/api/Comments/{answerid}/answer");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Comments>>();
+        }
+
+        public async Task<List<Comments>> SearchComments(string keyword)
+        {
+            var response = await _httpClient.GetAsync($"/api/Comments/{keyword}/search");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Comments>>();
+        }
+
+        public async Task UpvoteComments(int id)
+        {
+            var response = await _httpClient.PutAsync($"/api/Comments/{id}", null);
 
             response.EnsureSuccessStatusCode();
         }
