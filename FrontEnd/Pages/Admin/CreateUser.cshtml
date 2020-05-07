@@ -1,0 +1,78 @@
+﻿@page
+@model FrontEnd.Pages.Admin.CreateUserModel
+@{
+    ViewData["Title"] = "Create User";
+}
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/css/signup.css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'CreateUser/?handler=AuthenticateUser',
+                success: function (data) {
+                    //success
+                    if (data.indexOf("Login") != -1) {
+                        alert("Please Login!");
+                        setTimeout(function () { window.location.href = "/Login"; }, 1000);
+                    }
+                    if (data.indexOf("Index") != -1) {
+                        alert("You are not allowed to access!");
+                        setTimeout(function () { window.location.href = "/Index"; }, 1000);
+                    }
+                },
+                error: function (error) {
+                    console.log("Error: " + error);
+                }
+            })
+        });
+    </script>
+}
+
+<h1>Sign Up</h1>
+
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="signupcontainer">
+        <div class="row">
+            <h4>Account</h4>
+            <div class="input-group input-group-icon">
+                <input asp-for="_currentUser.FirstName" type="text" placeholder="First Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="_currentUser.LastName" type="text" placeholder="Last Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <div class="input-group">
+                <select class="form-control" asp-for="_currentUser.UserType">
+                    <option selected>--Please Select--</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Moderator">Moderator</option>
+                    <option value="Admin">System Administrator</option>
+                </select>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="_currentUser.UserName" type="text" placeholder="UserName" />
+                <div class="input-icon"><i class="fa fa-user"></i></div>
+            </div>
+            <div class="input-group input-group-icon">
+                <input asp-for="_currentUser.Password" type="password" placeholder="Password" />
+                <div class="input-icon"><i class="fa fa-key"></i></div>
+            </div>
+        </div>
+        <button type="submit" class="button buttonBlue">
+            Sign Up
+            <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+        </button>
+        @if (ViewData["Message"] != null)
+        {
+        <p class="text-success">@ViewData["Message"]&#33; @*<a asp-area="" asp-page="/Login">Login</a>*@</p>
+
+        }
+    </div>
+    @Html.AntiForgeryToken()
+</form>

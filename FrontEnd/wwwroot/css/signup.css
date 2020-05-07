@@ -8,7 +8,6 @@ body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: #b9b9b9;
-  background-color: #e3e3e3;
 }
 h1,h3 {
     font-weight: 300;
@@ -154,10 +153,6 @@ select:focus,
 select:active {
   outline: 0;
 }
-select option {
-  background-color: #4a89dc;
-  color: #fff;
-}
 .input-group {
   margin-bottom: 1em;
   zoom: 1;
@@ -207,7 +202,7 @@ select option {
   transition: 0.35s ease-in-out;
   transition: all 0.35s ease-in-out;
 }
-.container {
+.signupcontainer {
   max-width: 38em;
   padding: 1em 3em 2em 3em;
   margin: 0em auto;

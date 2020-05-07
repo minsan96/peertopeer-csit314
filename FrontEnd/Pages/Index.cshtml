@@ -3,6 +3,26 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: 'POST',
+                url: 'Index/?handler=FindUser',
+                success: function (data) {
+                    if (data.indexOf("not found") != -1) {
+                        alert("Please Login!");
+                        setTimeout(function () { window.location.href = "/Login"; }, 1000);
+                    }
+                    //success
+                },
+                error: function (error) {
+                    console.log("Error: " + error);
+                }
+            })
+        });
+    </script>
+}
 <div class="row">
     <form method="get">
         @Html.AntiForgeryToken()

@@ -108,6 +108,15 @@ namespace FrontEnd.Services
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<Questions>> GetTopRatedQuestions(int top = 5, int days = 7)
+        {
+            var response = await _httpClient.GetAsync($"/api/Questions/top?topno={top}&days={days}");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Questions>>();
+        }
         #endregion
 
         #region Answers
@@ -215,6 +224,15 @@ namespace FrontEnd.Services
 
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<Answers>> GetTopRatedAnswers(int top = 5, int days = 7)
+        {
+            var response = await _httpClient.GetAsync($"/api/Answers/top?topno={top}&days={days}");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Answers>>();
+        }
         #endregion
 
         #region Comments
@@ -321,6 +339,15 @@ namespace FrontEnd.Services
             var response = await _httpClient.PutAsync($"/api/Comments/{id}", null);
 
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<Comments>> GetTopRatedComments(int top = 5, int days = 7)
+        {
+            var response = await _httpClient.GetAsync($"/api/Comments/top?topno={top}&days={days}");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Comments>>();
         }
         #endregion
 

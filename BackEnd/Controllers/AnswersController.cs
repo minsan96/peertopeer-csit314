@@ -158,6 +158,11 @@ namespace BackEnd.Controllers
 
             _context.Entry(answers).State = EntityState.Modified;
 
+            var userid = answers.CreatedBy;
+            var users = await _context.Users.FindAsync(userid);
+            users.Rating = users.Rating + 1;
+            _context.Entry(users).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -175,6 +180,20 @@ namespace BackEnd.Controllers
             }
 
             return NoContent();
+        }
+
+        // GET: api/Answers/top
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<Answers>>> GetTop5Answers(int topno = 5, int days = 7)
+        {
+            var answers = await _context.Answers.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+
+            if (answers == null)
+            {
+                return NotFound();
+            }
+
+            return answers;
         }
 
         private bool AnswersExists(int id)

@@ -22,6 +22,8 @@ namespace FrontEnd.Services
         Task<List<Questions>> SearchQuestions(string keyword);
 
         Task UpvoteQuestions(int id);
+
+        Task<List<Questions>> GetTopRatedQuestions(int top = 5, int days = 7);
         #endregion
 
         #region Answers
@@ -42,6 +44,8 @@ namespace FrontEnd.Services
         Task<List<Answers>> SearchAnswers(string keyword);
 
         Task UpvoteAnswers(int id);
+
+        Task<List<Answers>> GetTopRatedAnswers(int top = 5, int days = 7);
         #endregion
 
         #region Comments
@@ -62,6 +66,8 @@ namespace FrontEnd.Services
         Task<List<Comments>> SearchComments(string keyword);
 
         Task UpvoteComments(int id);
+
+        Task<List<Comments>> GetTopRatedComments(int top = 5, int days = 7);
         #endregion
 
         #region Users

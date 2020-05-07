@@ -57,6 +57,10 @@ namespace FrontEnd.Pages
             Response.Cookies.Append("CurrentUser", jsonuser, new CookieOptions() {
                 Expires = DateTime.Now.AddMinutes(30)
             });
+            Response.Cookies.Append("CurrentUserType", login.UserType, new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMinutes(30)
+            });
             return RedirectToPage("Index");
         }
 

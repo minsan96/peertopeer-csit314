@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using FrontEnd.Models;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace FrontEnd
 {
@@ -76,7 +77,7 @@ namespace FrontEnd
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
