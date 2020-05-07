@@ -188,6 +188,11 @@ namespace BackEnd.Controllers
         {
             var answers = await _context.Answers.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
 
+            if(days == 0)
+            {
+                answers = await _context.Answers.OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            }
+
             if (answers == null)
             {
                 return NotFound();

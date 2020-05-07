@@ -174,6 +174,11 @@ namespace BackEnd.Controllers
         {
             var comments = await _context.Comments.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
 
+            if (days == 0)
+            {
+                comments = await _context.Comments.OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            }
+
             if (comments == null)
             {
                 return NotFound();

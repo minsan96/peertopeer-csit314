@@ -174,6 +174,11 @@ namespace BackEnd.Controllers
         {
             var questions = await _context.Questions.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
 
+            if (days == 0)
+            {
+                questions = await _context.Questions.OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            }
+
             if (questions == null)
             {
                 return NotFound();
