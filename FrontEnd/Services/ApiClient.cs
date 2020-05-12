@@ -421,6 +421,15 @@ namespace FrontEnd.Services
 
             return await response.Content.ReadAsAsync<Users>();
         }
+
+        public async Task<List<Users>> GetTopRatedUsers(int top = 5, int days = 7)
+        {
+            var response = await _httpClient.GetAsync($"/api/Users/top?topno={top}&days={days}");
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<Users>>();
+        }
         #endregion
     }
 }

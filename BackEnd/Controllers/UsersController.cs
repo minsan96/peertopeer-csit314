@@ -120,13 +120,14 @@ namespace BackEnd.Controllers
         [HttpPost("{username}/{password}")]
         public async Task<ActionResult<Users>> Login(string username, string password)
         {
-            var users = GetUserByUsername(username);
             if(!UsernameExists(username))
             {
                 return NotFound();
             }
-            
-            if(hasher.VerifyHashedPassword(users, users.Password, password) == PasswordVerificationResult.Failed)
+
+            var users = GetUserByUsername(username);
+
+            if (hasher.VerifyHashedPassword(users, users.Password, password) == PasswordVerificationResult.Failed)
             {
                 return BadRequest("Incorrect password. Try again.");
             }
@@ -141,6 +142,25 @@ namespace BackEnd.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 throw;
+            }
+
+            return users;
+        }
+
+        // GET: api/Comments/top
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<Users>>> GetTop5Users(int topno = 5, int days = 7)
+        {
+            var users = await _context.Users.Where(e => (DateTime.Now - e.CreatedDate).TotalDays <= days && e.UserType == "Normal").OrderByDescending(e => e.Rating).ThenBy(e => e.Rating == 0).Take(topno).ToListAsync();
+
+            if (days == 0)
+            {
+                users = await _context.Users.Where(e => e.UserType == "Normal").OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            }
+
+            if (users == null)
+            {
+                return NotFound();
             }
 
             return users;

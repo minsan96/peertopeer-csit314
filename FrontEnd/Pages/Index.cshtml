@@ -4,6 +4,19 @@
     ViewData["Title"] = "Dashboard";
 }
 @section Scripts{
+    <link rel="stylesheet" href="~/css/admindashboard.css" />
+    <link rel="stylesheet" href="~/css/adminmain.css" />
+    <script type="text/javascript">
+        $(function () {
+            $('.card_more_button').on('click',
+                function () {
+                    $(this).closest('.card').toggleClass('card_full');
+                    $(this).siblings('.card_more_content').slideToggle('fast');
+                    $(this).toggleClass('flipY');
+                }
+            )
+        }(jQuery));
+    </script>
     <script type="text/javascript">
         $(document).ready(function () {
             $.ajax({
@@ -28,9 +41,62 @@
         @Html.AntiForgeryToken()
     </form>
 </div>
-<div class="row">
+@*<div class="row">
     <h4> Welcome @Model._currentUser.FirstName @Model._currentUser.LastName</h4>
 </div>
 <div class="row" style="padding-top:20px">
     <h4> Your Last login : @Model._currentUser.LastLogin  </h4>
-</div>
+</div>*@
+<h6 style="margin-bottom:0px;"> Welcome, @Model._currentUser.FirstName @Model._currentUser.LastName</h6>
+<h6> Your Last login : @Model._currentUser.LastLogin  </h6>
+
+<h1 class="column h6 color_label" style="margin-bottom: 0px;">Report</h1>
+<section class="wrapper">
+    <div class="row card_row">
+        <div class="column half_whole">
+            <article class="card box_panel">
+                <label class="card_label">
+                    Most Rated Questions of the Week
+                </label>
+                <section class="card_body">
+                    @{ int i = 1;}
+                    @foreach (var item in Model._mostratedqn1)
+                    {
+                        <h6>@i . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6>
+                        i++;
+                    }
+                </section>
+            </article>
+        </div>
+        <div class="column half_whole">
+            <article class="card box_panel">
+                <label class="card_label">
+                    Most Rated Questions of the Month
+                </label>
+                <section class="card_body">
+                    @{ int j = 1;}
+                    @foreach (var item in Model._mostratedqn2)
+                    {
+                        <h6>@j . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6>
+                        j++;
+                    }
+                </section>
+            </article>
+        </div>
+        <div class="column half_whole">
+            <article class="card box_panel">
+                <label class="card_label">
+                    Most Rated Answers of the Week
+                </label>
+                <section class="card_body">
+                    @{ int k = 1;}
+                    @foreach (var item in Model._mostratedans)
+                    {
+                        <h6>@k . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6>
+                        k++;
+                    }
+                </section>
+            </article>
+        </div>
+    </div>
+</section>

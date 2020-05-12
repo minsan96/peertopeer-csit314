@@ -39,28 +39,51 @@ namespace FrontEnd.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var username = User.UserName;
-            var password = User.Password;
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            try
             {
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-                return Page();
+                var username = User.UserName;
+                var password = User.Password;
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                    return Page();
+                }
+            
+                var login = await _apiClient.Login(username, password);
+           
+                if(login == null || string.IsNullOrEmpty(login.UserName))
+                {
+                    ModelState.AddModelError(string.Empty, "This user does not exist.");
+                    return Page();
+                }
+                var jsonuser = JsonConvert.SerializeObject(login);
+                await this.SignInUser(login.UserName, false);
+                Response.Cookies.Append("CurrentUser", jsonuser, new CookieOptions() {
+                    Expires = DateTime.Now.AddMinutes(30)
+                });
+                Response.Cookies.Append("CurrentUserType", login.UserType, new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddMinutes(30)
+                });
             }
-            var login = await _apiClient.Login(username, password);
-            if(login == null || string.IsNullOrEmpty(login.UserName))
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-                return Page();
+                if (ex.Message.Contains("400"))
+                {
+                    ModelState.AddModelError(string.Empty, "Incorrect username and password.");
+                    return Page();
+                }
+                else if (ex.Message.Contains("404"))
+                {
+                    ModelState.AddModelError(string.Empty, "This user does not exist.");
+                    return Page();
+                }
+                else if(ex.Message.Contains("500"))
+                {
+                    ModelState.AddModelError(string.Empty, "Internal Server Error.");
+                    return Page();
+                }
             }
-            var jsonuser = JsonConvert.SerializeObject(login);
-            await this.SignInUser(login.UserName, false);
-            Response.Cookies.Append("CurrentUser", jsonuser, new CookieOptions() {
-                Expires = DateTime.Now.AddMinutes(30)
-            });
-            Response.Cookies.Append("CurrentUserType", login.UserType, new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMinutes(30)
-            });
             return RedirectToPage("Index");
         }
 

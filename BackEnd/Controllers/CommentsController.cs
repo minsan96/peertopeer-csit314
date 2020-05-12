@@ -172,7 +172,7 @@ namespace BackEnd.Controllers
         [HttpGet("top")]
         public async Task<ActionResult<IEnumerable<Comments>>> GetTop5Comments(int topno = 5, int days = 7)
         {
-            var comments = await _context.Comments.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            var comments = await _context.Comments.Where(e => (DateTime.Now - e.CreatedDate).TotalDays <= days).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
 
             if (days == 0)
             {

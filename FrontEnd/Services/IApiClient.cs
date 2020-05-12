@@ -82,6 +82,8 @@ namespace FrontEnd.Services
         Task DeleteUsers(int id);
 
         Task<Users> Login(string username, string password);
+
+        Task<List<Users>> GetTopRatedUsers(int top = 5, int days = 7);
         #endregion
     }
 }

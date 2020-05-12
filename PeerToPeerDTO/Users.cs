@@ -24,7 +24,7 @@ namespace PeerToPeerDTO
 
         public int Rating { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public DateTime? LastLogin { get; set; }
     }

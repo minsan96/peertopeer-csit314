@@ -19,7 +19,17 @@ namespace FrontEnd.Pages
         {
             _apiClient = apiClient;
         }
-        public IActionResult OnGet()
+
+        [BindProperty]
+        public List<Questions> _mostratedqn1 { get; set; }
+
+        [BindProperty]
+        public List<Questions> _mostratedqn2 { get; set; }
+
+        [BindProperty]
+        public List<Answers> _mostratedans { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -31,6 +41,10 @@ namespace FrontEnd.Pages
             {
                 return RedirectToPage("/Login");
             }
+
+            _mostratedqn1 = await _apiClient.GetTopRatedQuestions();
+            _mostratedqn2 = await _apiClient.GetTopRatedQuestions(5, 30);
+            _mostratedans = await _apiClient.GetTopRatedAnswers();
 
             _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
             // Info.  

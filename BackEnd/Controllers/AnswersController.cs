@@ -186,7 +186,7 @@ namespace BackEnd.Controllers
         [HttpGet("top")]
         public async Task<ActionResult<IEnumerable<Answers>>> GetTop5Answers(int topno = 5, int days = 7)
         {
-            var answers = await _context.Answers.Where(e => (DateTime.Now - e.CreatedDate).TotalDays >= 7).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
+            var answers = await _context.Answers.Where(e => (DateTime.Now - e.CreatedDate).TotalDays <= days).OrderByDescending(e => e.Rating).Take(topno).ToListAsync();
 
             if(days == 0)
             {
