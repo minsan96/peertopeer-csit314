@@ -90,10 +90,25 @@
                 </label>
                 <section class="card_body">
                     @{ int k = 1;}
-                    @foreach (var item in Model._mostratedans)
+                    @foreach (var item in Model._mostratedans1)
                     {
                         <h6>@k . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6>
                         k++;
+                    }
+                </section>
+            </article>
+        </div>
+        <div class="column half_whole">
+            <article class="card box_panel">
+                <label class="card_label">
+                    Most Rated Answers of the Month
+                </label>
+                <section class="card_body">
+                    @{ int l = 1;}
+                    @foreach (var item in Model._mostratedans2)
+                    {
+                        <h6>@l . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6>
+                        l++;
                     }
                 </section>
             </article>
