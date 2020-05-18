@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FrontEnd.Pages
+namespace FrontEnd.Pages.QPages
 {
-    public class PrivacyModel : PageModel
+    public class EditAnswerModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }

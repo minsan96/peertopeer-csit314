@@ -4,8 +4,12 @@
     ViewData["Title"] = "Dashboard";
 }
 @section Scripts{
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/one-page-wonder.min.css" />
     <link rel="stylesheet" href="~/css/admindashboard.css" />
     <link rel="stylesheet" href="~/css/adminmain.css" />
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
     <script type="text/javascript">
         $(function () {
             $('.card_more_button').on('click',
@@ -42,76 +46,90 @@
     </form>
 </div>
 @*<div class="row">
-    <h4> Welcome @Model._currentUser.FirstName @Model._currentUser.LastName</h4>
-</div>
-<div class="row" style="padding-top:20px">
-    <h4> Your Last login : @Model._currentUser.LastLogin  </h4>
-</div>*@
-<h6 style="margin-bottom:0px;"> Welcome, @Model._currentUser.FirstName @Model._currentUser.LastName</h6>
-<h6> Your Last login : @Model._currentUser.LastLogin  </h6>
-
-<h1 class="column h6 color_label" style="margin-bottom: 0px;">Report</h1>
-<section class="wrapper">
-    <div class="row card_row">
-        <div class="column half_whole">
-            <article class="card box_panel">
-                <label class="card_label">
-                    Most Rated Questions of the Week
-                </label>
-                <section class="card_body">
-                    @{ int i = 1;}
-                    @foreach (var item in Model._mostratedqn1)
-                    {
-                        <h6>@i . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6>
-                        i++;
-                    }
-                </section>
-            </article>
-        </div>
-        <div class="column half_whole">
-            <article class="card box_panel">
-                <label class="card_label">
-                    Most Rated Questions of the Month
-                </label>
-                <section class="card_body">
-                    @{ int j = 1;}
-                    @foreach (var item in Model._mostratedqn2)
-                    {
-                        <h6>@j . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6>
-                        j++;
-                    }
-                </section>
-            </article>
-        </div>
-        <div class="column half_whole">
-            <article class="card box_panel">
-                <label class="card_label">
-                    Most Rated Answers of the Week
-                </label>
-                <section class="card_body">
-                    @{ int k = 1;}
-                    @foreach (var item in Model._mostratedans1)
-                    {
-                        <h6>@k . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6>
-                        k++;
-                    }
-                </section>
-            </article>
-        </div>
-        <div class="column half_whole">
-            <article class="card box_panel">
-                <label class="card_label">
-                    Most Rated Answers of the Month
-                </label>
-                <section class="card_body">
-                    @{ int l = 1;}
-                    @foreach (var item in Model._mostratedans2)
-                    {
-                        <h6>@l . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6>
-                        l++;
-                    }
-                </section>
-            </article>
+        <h4> Welcome @Model._currentUser.FirstName @Model._currentUser.LastName</h4>
+    </div>
+    <div class="row" style="padding-top:20px">
+        <h4> Your Last login : @Model._currentUser.LastLogin  </h4>
+    </div>
+    <h6> Your Last login : @Model._currentUser.LastLogin  </h6>*@
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">Welcome, @Model._currentUser.FirstName</h1>
+            <h2 class="masthead-subheading mb-0">Please navigate to Questions</h2>
+            <a class="btn btn-primary btn-xl rounded-pill mt-5" asp-area="" asp-page="/QPages/Index">Questions</a>
         </div>
     </div>
-</section>
+    <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div>
+</header>
+@if (Model._currentUser.UserType == "Admin")
+{
+    <h1 class="column h6 color_label" style="margin-bottom: 0px; text-align:center;">Report</h1>
+    <section class="wrapper">
+        <div class="row card_row">
+            <div class="column half_whole">
+                <article class="card box_panel">
+                    <label class="card_label">
+                        Most Rated Questions of the Week
+                    </label>
+                    <section class="card_body">
+                        @{ int i = 1;}
+                        @foreach (var item in Model._mostratedqn1)
+                        {
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@i . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            i++;
+                        }
+                    </section>
+                </article>
+            </div>
+            <div class="column half_whole">
+                <article class="card box_panel">
+                    <label class="card_label">
+                        Most Rated Questions of the Month
+                    </label>
+                    <section class="card_body">
+                        @{ int j = 1;}
+                        @foreach (var item in Model._mostratedqn2)
+                        {
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@j . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            j++;
+                        }
+                    </section>
+                </article>
+            </div>
+            <div class="column half_whole">
+                <article class="card box_panel">
+                    <label class="card_label">
+                        Most Interesting Questions of all time
+                    </label>
+                    <section class="card_body">
+                        @{ int k = 1;}
+                        @foreach (var item in Model._mostratedqn3)
+                        {
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@k . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            k++;
+                        }
+                    </section>
+                </article>
+            </div>
+            <div class="column half_whole">
+                <article class="card box_panel">
+                    <label class="card_label">
+                        Most Rated Answers of the Month
+                    </label>
+                    <section class="card_body">
+                        @{ int l = 1;}
+                        @foreach (var item in Model._mostratedans2)
+                        {
+                            <a asp-page="/QPages/Details" asp-route-id="@item.QuestionID"><h6>@l . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            l++;
+                        }
+                    </section>
+                </article>
+            </div>
+        </div>
+    </section>
+}

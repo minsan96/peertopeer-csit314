@@ -102,9 +102,9 @@ namespace FrontEnd.Services
             return await response.Content.ReadAsAsync<List<Questions>>();
         }
 
-        public async Task UpvoteQuestions(int id)
+        public async Task UpvoteQuestions(int id, bool downvote = false)
         {
-            var response = await _httpClient.PutAsync($"/api/Questions/{id}", null);
+            var response = await _httpClient.PutAsync($"/api/Questions/{id}/{downvote}/upvote", null);
 
             response.EnsureSuccessStatusCode();
         }
@@ -218,9 +218,9 @@ namespace FrontEnd.Services
             return await response.Content.ReadAsAsync<List<Answers>>();
         }
 
-        public async Task UpvoteAnswers(int id)
+        public async Task UpvoteAnswers(int id, bool downvote = false)
         {
-            var response = await _httpClient.PutAsync($"/api/Answers/{id}", null);
+            var response = await _httpClient.PutAsync($"/api/Answers/{id}/{downvote}/upvote", null);
 
             response.EnsureSuccessStatusCode();
         }
@@ -334,9 +334,9 @@ namespace FrontEnd.Services
             return await response.Content.ReadAsAsync<List<Comments>>();
         }
 
-        public async Task UpvoteComments(int id)
+        public async Task UpvoteComments(int id, bool downvote = false)
         {
-            var response = await _httpClient.PutAsync($"/api/Comments/{id}", null);
+            var response = await _httpClient.PutAsync($"/api/Comments/{id}/{downvote}/upvote", null);
 
             response.EnsureSuccessStatusCode();
         }
@@ -429,6 +429,13 @@ namespace FrontEnd.Services
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsAsync<List<Users>>();
+        }
+
+        public async Task ChangePassword(int id, string password)
+        {
+            var response = await _httpClient.PutAsync($"/api/Users/{id}/{password}/changepassword", null);
+
+            response.EnsureSuccessStatusCode();
         }
         #endregion
     }

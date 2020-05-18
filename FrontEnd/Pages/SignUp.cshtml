@@ -15,19 +15,25 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="signupcontainer">
         <div class="row">
-            <h4>Account</h4>
+            <div style="width:100%">
+                <h4>Account</h4>
+            </div>
+            <label style="margin-top:10px;"><b>First Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="User.FirstName" type="text" placeholder="First Name" />
                 <div class="input-icon"><i class="fa fa-user-plus"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>Last Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="User.LastName" type="text" placeholder="Last Name" />
                 <div class="input-icon"><i class="fa fa-user-plus"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>User Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="User.UserName" type="text" placeholder="UserName" />
                 <div class="input-icon"><i class="fa fa-user"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>Password:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="User.Password" type="password" placeholder="Password" />
                 <div class="input-icon"><i class="fa fa-key"></i></div>

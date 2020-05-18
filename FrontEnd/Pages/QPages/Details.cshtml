@@ -1,47 +1,363 @@
 ﻿@page
 @model FrontEnd.Pages.QPages.DetailsModel
+@{
+    <link rel="stylesheet" href="~/css/questiondetails.css" />
+    <style>
+        #Child0 {
+            outline: none;
+            border-color: #29ff02;
+            box-shadow: 0 0 10px #29ff02;
+        }
+    </style>
+}
+@section Scripts {
+    <script type="text/javascript">
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            var existingcookie = getCookie(name);
+            if (existingcookie) {
+                value = existingcookie + "," + value
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+            else {
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        function validatecookie(cookie, qnid) {
+            var check = false;
+            if (cookie && cookie.indexOf(',') != -1) {
+                var array = cookie.split(",");
+                for (var i = 0; i < array.length; i++) {
+                    var str = array[i];
+                    if (str == qnid) {
+                        check = true;
+                    }
+                }
+            }
+            else if (cookie && cookie.indexOf(',') == -1) {
+                if (cookie == qnid) {
+                    check = true;
+                }
+            }
+            return check;
+        }
+        function getUpvoteType(divid) {
+            var type = "";
+            if (divid.indexOf('A') !== -1) {
+                type = "Answer";
+            }
+            else if (divid.indexOf('C') !== -1) {
+                type = "Comment";
+            }
+            else if (divid.indexOf('Q') !== -1) {
+                type = "Question";
+            }
+            return type;
+        }
+        function postanswer(txtid) {
+            var currentusertype = "@ViewData["CurrentUserType"]";
+            var txt = $(txtid).val();
+            var params = (new URL(document.location)).searchParams;
+            var qid = params.get("id");
+            $.ajax({
+                type: 'POST',
+                url: '/QPages/Details?handler=Answer&id=' + qid + '&answertext=' + txt,
+                success: function (data) {
+                    //success
+                    if (data.indexOf("Success") != -1) {
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Error Posting Answer!");
+                    }
+                },
+                error: function (error) {
+                    console.log("Error: " + error);
+                }
+            });
+        }
+        function postcomment(txtid, answerid) {
+            var currentusertype = "@ViewData["CurrentUserType"]";
+            var txt = $('#' + txtid).val();
+            if (currentusertype == "Normal") {}
+            $.ajax({
+                type: 'POST',
+                url: '/QPages/Details?handler=Comment&id=' + answerid + '&answertext=' + txt,
+                success: function (data) {
+                    //success
+                    if (data.indexOf("Success") != -1) {
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Error Posting Answer!");
+                    }
+                },
+                error: function (error) {
+                    console.log("Error: " + error);
+                }
+            });
+        }
+        function showcomment(divid) {
+            $('#' + divid).show();
+        }
+        $(function () {
+            $('.commentdiv').hide();
+            $(".increment").click(function () {
+                var currentusertype = "@ViewData["CurrentUserType"]";
+                var votingoff = "@ViewData["VotingOff"]";
+                if (currentusertype == "Normal" && !votingoff) { 
+                    var divid = $("~ .count", this).attr('id');
+                    var type = getUpvoteType(divid);
 
+                    var params = (new URL(document.location)).searchParams;
+                    var qnid = params.get("id");
+                    var acookie = getCookie('AUpvote');
+                    var qcookie = getCookie('QUpvote');
+                    var ccookie = getCookie('CUpvote');
+                    var cookieexist = false;
+                    if (type == "Question" && qcookie) {
+                        cookieexist = validatecookie(qcookie, qnid);
+                    }
+                    else if (type == "Answer" && acookie) {
+                        cookieexist = validatecookie(acookie, qnid);
+                    }
+                    else if (type == "Comment" && ccookie) {
+                        cookieexist = validatecookie(ccookie, qnid);
+                    }                    
+                    
+                    if (!cookieexist) {
+                        var typeid = divid.substring(1);
+                        var votetype = "up";
+                        
+                        if ($(this).hasClass("up")) {
+                            //do nothing
+                        } else {
+                            votetype = "down";
+                        }
+
+                        $(this).parent().addClass("bump");
+
+                        setTimeout(function () {
+                            $(this).parent().removeClass("bump");
+                        }, 400);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/QPages/Details?handler=Voting&id=' + typeid + '&type=' + type + '&votetype=' + votetype,
+                            success: function (data) {
+                                //success
+                                if (data.indexOf("Error") == -1) {
+                                    var count = parseInt($("~ .count", this).text());
+                                    if ($(this).hasClass("up")) {
+                                        count = count + 1;
+
+                                        $("~ .count", this).text(count);
+                                    } else {
+                                        count = count - 1;
+                                        $("~ .count", this).text(count);
+                                    }
+
+                                    if (type == "Question") {
+                                        setCookie('QUpvote', qnid, 1);
+                                    }
+                                    else if (type == "Answer") {
+                                        setCookie('AUpvote', qnid, 1);
+                                    }
+                                    else if (type == "Comment") {
+                                        setCookie('CUpvote', qnid, 1);
+                                    }
+                                    window.location.reload(true);
+                                }
+                            },
+                            error: function (error) {
+                                console.log("Error: " + error);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}
 <div>
-    <h4>Question 1</h4>
+    <h4>@Html.DisplayFor(model => model.Questions.Question)</h4>
     <hr />
-    <dl class="row">
+    <dl class="row" style="align-items: center; height: 150px;">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Questions.Question)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Questions.Question)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Questions.Description)
+            <div class="vote circle" style="transform: scale(0.5, 0.5);">
+                <div class="increment up"></div>
+                <div class="increment down"></div>
+                @{string upvoteqid = "Q" + Model.Questions.ID.ToString();}
+                <div id="@upvoteqid" class="count">@Html.DisplayFor(model => model.Questions.Rating)</div>
+            </div>
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Questions.Description)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Questions.Rating)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Questions.Rating)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Questions.CreatedBy)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Questions.CreatedBy)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Questions.CreatedDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Questions.CreatedDate)
-        </dd>
     </dl>
-</div>
+</div>  
 <div>
-    <a asp-page="./Index">Back to Questions List</a>
+    <span class="upp-com-auth-ts">Posted by 
+        @for (int i = 0; i < Model.userlist.Count(); i++)
+        {
+            string name = Model.userlist[i].FirstName + " " + Model.userlist[i].LastName;
+            if (Model.Questions.CreatedBy == Model.userlist[i].ID)
+            {
+                @Html.DisplayFor(modelItem => name)
+            }
+        } on @Model.Questions.CreatedDate
+    </span>
 </div>
-<div>
-    <h4>Answers</h4>
+<br />
+<div class="bigcontainer">
+    <h4>Answers &#38; Comments</h4>
     <hr />
+    @{ int c = 0; }
+    @foreach (var item in Model.Answers)
+    {
+        string upvoteid = "A" + item.ID.ToString();
+        string child0 = "Child" + c.ToString();
+        string commentdivid = "Comment" + c.ToString();
+        string fullname = "Deleted User";
+        string cfullname = "Deleted User";
+        string commentboxid = "CommentBox" + c.ToString();
+        <div class="upp-comments">
 
+            <div class="upp-comment">
+                <div id="@child0">
+                    <div class="upp-com-auth" style="height: 100px; width: fit-content;">
+                        @*<a href="javascript:void(0)"><img class="upp-img-person" src="https://cdn.clipart.email/6325f65fdf3c5522f4f1764f0d3c2a97_bant-international-random-thread-6218134_178-178.png" alt=""></a>*@
+                        <div class="vote circle" style="transform: scale(0.5, 0.5);">
+                            <div class="increment up"></div>
+                            <div class="increment down"></div>
+
+                            <div id="@upvoteid" class="count">@Html.DisplayFor(modelItem => item.Rating)</div>
+                        </div>
+                        <b class="upp-com-auth-name">
+                            @for (int i = 0; i < Model.userlist.Count(); i++)
+                            {
+                                if (item.CreatedBy == Model.userlist[i].ID)
+                                {
+                                    fullname = Model.userlist[i].FirstName + " " + Model.userlist[i].LastName;
+                                }
+                            }
+                            @Html.DisplayFor(modelItem => fullname)
+                        </b>
+                        @if (c == 0)
+                        {
+                            <span class="upp-com-auth-ts">Posted answer on @Html.DisplayFor(modelItem => item.CreatedDate) &#149; <b>Marked As Answer</b></span>
+                        }
+                        else
+                        {
+                            <span class="upp-com-auth-ts">Posted answer on @Html.DisplayFor(modelItem => item.CreatedDate)</span>
+                        }
+                    </div>
+                    <p style="margin-left: 3rem;">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </p>
+                    @if (c == 0)
+                    {
+                        <i class="fa fa-check" style="font-size:2em; color:#29ff02" aria-hidden="true"></i>
+                    }
+                    <a href='javascript:showcomment("@commentdivid")' style="float:right;">Post Comment</a>
+                </div>
+                <div class="upp-com-content">
+                    <div class="upp-com-replies" style="margin-left: 6rem;">
+                        @foreach (var item2 in Model.Comments)
+                        {
+                            string upvotecid = "C" + item2.ID.ToString();
+                            if (item2.AnswerID == item.ID)
+                            {
+                                <div class="upp-comment">
+                                    <div class="upp-com-auth" style="height: 100px; width: fit-content;">
+                                        <div class="vote circle" style="transform: scale(0.4, 0.4);">
+                                            <div class="increment up"></div>
+                                            <div class="increment down"></div>
+
+                                            <div id="@upvotecid" class="count">@Html.DisplayFor(modelItem => item2.Rating)</div>
+                                        </div>
+                                        <b class="upp-com-auth-name">
+                                            @for (int i = 0; i < Model.userlist.Count(); i++)
+                                            {
+                                                if (item2.CreatedBy == Model.userlist[i].ID)
+                                                {
+                                                    cfullname = Model.userlist[i].FirstName + " " + Model.userlist[i].LastName;
+                                                }
+                                            }
+                                            @Html.DisplayFor(modelItem => cfullname)
+                                        </b>
+                                        <span class="upp-com-auth-ts">Posted answer on @Html.DisplayFor(modelItem => item2.CreatedDate)</span>
+                                    </div>
+                                    <div class="upp-com-content">
+                                        <p style="margin-left: 4rem;">
+                                            @Html.DisplayFor(modelItem => item2.Description)
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div id="@commentdivid" class="upp-comment-box first commentdiv">
+                            <div class="upp-comment-box-avatar">
+                            </div>
+                            <div class="upp-comment-box-comm">
+                                <div class="upp-comment-box-comm-ent">
+                                    <textarea id="@commentboxid" placeholder="Add your comment ..." class="upp-comment-box-comm-ent-ta focus" required></textarea>
+                                </div>
+                                <div class="upp-comment-box-comm-actions">
+                                    <div class="upp-comment-box-comm-actions-meta">
+                                        <small class="upp-small">
+                                            <!-- Footer text -->
+                                            Do not post profanity. Repeat-offenders would be banned permanently.
+                                        </small>
+                                    </div>
+                                    <div class="upp-comment-box-comm-actions-action">
+                                        <p class="upp-comment-box-comm-word-count tc"><span>1500</span></p>
+                                        <a href='javascript:postcomment("@commentboxid","@item.ID");' id="postanswer" class="upp-btn">Post</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        c = c + 1; 
+    }
+        <div class="upp-comment-box first">
+            <div class="upp-comment-box-avatar">
+            </div>
+            <div class="upp-comment-box-comm">
+                <div class="upp-comment-box-comm-ent">
+                    <textarea id="answertext" placeholder="Add your answer ..." class="upp-comment-box-comm-ent-ta focus" required></textarea>
+                </div>
+                <div class="upp-comment-box-comm-actions">
+                    <div class="upp-comment-box-comm-actions-meta">
+                        <small class="upp-small">
+                            <!-- Footer text -->
+                            Do not post profanity. Repeat-offenders would be banned permanently.
+                        </small>
+                    </div>
+                    <div class="upp-comment-box-comm-actions-action">
+                        <p class="upp-comment-box-comm-word-count tc"><span>1500</span></p>
+                        <a href="javascript:postanswer(answertext);" id="postanswer" class="upp-btn">Post</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @Html.AntiForgeryToken()
 </div>

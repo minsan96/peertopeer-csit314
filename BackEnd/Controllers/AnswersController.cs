@@ -59,7 +59,7 @@ namespace BackEnd.Controllers
         [HttpGet("{questionid}/questionid")]
         public async Task<ActionResult<IEnumerable<Answers>>> GetAnswersByQuestion(int questionid)
         {
-            var answers = await _context.Answers.Where(e => e.QuestionID == questionid).ToListAsync();
+            var answers = await _context.Answers.Where(e => e.QuestionID == questionid).OrderByDescending(e => e.Rating).ThenBy(e => e.Rating == 0).ToListAsync();
 
             if (answers == null)
             {
@@ -92,7 +92,11 @@ namespace BackEnd.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(answers).State = EntityState.Modified;
+            var update = await _context.Answers.FindAsync(id);
+            update.Description = answers.Description;
+            update.Rating = answers.Rating;
+
+            _context.Entry(update).State = EntityState.Modified;
 
             try
             {
@@ -141,8 +145,8 @@ namespace BackEnd.Controllers
         }
 
         // PUT: api/Answers/5/upvote
-        [HttpPut("{id}/upvote")]
-        public async Task<IActionResult> UpvoteAnswers(int id)
+        [HttpPut("{id}/{downvote}/upvote")]
+        public async Task<IActionResult> UpvoteAnswers(int id, bool downvote)
         {
             var answers = await _context.Answers.FindAsync(id);
             if (answers == null)
@@ -153,14 +157,28 @@ namespace BackEnd.Controllers
             {
                 return BadRequest();
             }
-
-            answers.Rating = answers.Rating + 1;
+            
+            if (downvote)
+            {
+                answers.Rating = answers.Rating - 1;
+            }
+            else
+            {
+                answers.Rating = answers.Rating + 1;
+            }
 
             _context.Entry(answers).State = EntityState.Modified;
 
             var userid = answers.CreatedBy;
             var users = await _context.Users.FindAsync(userid);
-            users.Rating = users.Rating + 1;
+            if (downvote)
+            {
+                users.Rating = users.Rating - 1;
+            }
+            else
+            {
+                users.Rating = users.Rating + 1;
+            }
             _context.Entry(users).State = EntityState.Modified;
 
             try

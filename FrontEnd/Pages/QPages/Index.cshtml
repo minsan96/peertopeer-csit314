@@ -1,10 +1,24 @@
 ﻿@page
 @model FrontEnd.Pages.QPages.IndexModel
-
+@section Scripts{
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" />
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#qpagetable').DataTable();
+            $('#answertable').DataTable();
+        });
+    </script>
+}
+<hr />
+<h3>Questions</h3>
+<hr />
 <p>
     <a asp-page="Create">Post new question</a>
 </p>
-<table class="table">
+<table id="qpagetable" class="table">
     <thead>
         <tr>
             <th>
@@ -26,39 +40,96 @@
         </tr>
     </thead>
     <tbody>
-@{ int i = 0;}        
-@foreach (var item in Model.Questions) {
-    
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Question)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model.CreatorNames[i])
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @if (@item.CreatedBy == @Model._currentUser.ID)
-                {
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <span> | </span>
-                }
-                <a asp-page="./Details" asp-route-id="@item.ID">View</a>
-                @if (@item.CreatedBy == @Model._currentUser.ID)
-                {
-                    <span> | </span>
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-                }
+        @{ int i = 0;}
+        @foreach (var item in Model.Questions)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.CreatorNames[i])
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @if (@item.CreatedBy == @Model._currentUser.ID || Model._currentUser.UserType == "Moderator")
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <span> | </span>
+                    }
+                    <a asp-page="./Details" asp-route-id="@item.ID">View</a>
+                    @if (@item.CreatedBy == @Model._currentUser.ID || Model._currentUser.UserType == "Moderator")
+                    {
+                        <span> | </span>
+                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                </td>
+            </tr>
+            { i++; }
+        }
+    </tbody>
+</table>
+<hr />
+<h3>Answers</h3>
+<hr />
+<table id="answertable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].CreatedDate)
+            </th>
+            <th></th>
         </tr>
-    { i++; }
-}
+    </thead>
+    <tbody>
+        @{ int j = 0;}
+        @foreach (var item in Model.Answers)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.CreatorNames2[j])
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @if (@item.CreatedBy == @Model._currentUser.ID || Model._currentUser.UserType == "Moderator")
+                    {
+                        <a asp-page="./EditAnswer" asp-route-id="@item.ID">Edit</a> <span> | </span>
+                    }
+                    <a asp-page="./Details" asp-route-id="@item.QuestionID">View</a>
+                    @if (@item.CreatedBy == @Model._currentUser.ID || Model._currentUser.UserType == "Moderator")
+                    {
+                        <span> | </span>
+                        <a asp-page="./DeleteAnswer" asp-route-id="@item.ID">Delete</a>
+                    }
+                </td>
+            </tr>
+            { j++; }
+        }
     </tbody>
 </table>

@@ -34,11 +34,28 @@ namespace FrontEnd.Pages
                 {
                     Response.Cookies.Delete(cookie.Key);
                 }
+                if (cookie.Key == "CurrentUserType")
+                {
+                    Response.Cookies.Delete(cookie.Key);
+                }
+                if (cookie.Key == "CurrentUserName")
+                {
+                    Response.Cookies.Delete(cookie.Key);
+                }
+                if (cookie.Key == "CurrentUserID")
+                {
+                    Response.Cookies.Delete(cookie.Key);
+                }
+                if (cookie.Key.Contains("Upvote"))
+                {
+                    Response.Cookies.Delete(cookie.Key);
+                }
             }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var login = new Users();
             try
             {
                 var username = User.UserName;
@@ -48,8 +65,8 @@ namespace FrontEnd.Pages
                     ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
                     return Page();
                 }
-            
-                var login = await _apiClient.Login(username, password);
+
+                login = await _apiClient.Login(username, password);
            
                 if(login == null || string.IsNullOrEmpty(login.UserName))
                 {
@@ -62,6 +79,14 @@ namespace FrontEnd.Pages
                     Expires = DateTime.Now.AddMinutes(30)
                 });
                 Response.Cookies.Append("CurrentUserType", login.UserType, new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddMinutes(30)
+                });
+                Response.Cookies.Append("CurrentUserName", login.FirstName + " " + login.LastName, new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddMinutes(30)
+                });
+                Response.Cookies.Append("CurrentUserID", login.ID.ToString(), new CookieOptions()
                 {
                     Expires = DateTime.Now.AddMinutes(30)
                 });
@@ -84,7 +109,15 @@ namespace FrontEnd.Pages
                     return Page();
                 }
             }
-            return RedirectToPage("Index");
+            if(login.UserType == "Admin")
+            {
+                return RedirectToPage("Index");
+            }
+            else
+            {
+                return RedirectToPage("QPages/Index");
+            }
+            
         }
 
         private async Task SignInUser(string username, bool isPersistent)

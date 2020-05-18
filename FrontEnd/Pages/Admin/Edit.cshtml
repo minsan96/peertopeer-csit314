@@ -1,0 +1,63 @@
+﻿@page
+@model FrontEnd.Pages.Admin.EditModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/css/signup.css" />
+}
+
+<h1>Edit User</h1>
+
+
+<div class="signupcontainer">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row">
+            <div style="width:100%">
+                <h4>Account</h4>
+            </div>
+            <input asp-for="editUser.ID" type="hidden" />
+            <label style="margin-top:10px;"><b>First Name:</b></label>
+            <div class="input-group input-group-icon">
+                <input asp-for="editUser.FirstName" type="text" placeholder="First Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <label style="margin-top:10px;"><b>Last Name:</b></label>
+            <div class="input-group input-group-icon">
+                <input asp-for="editUser.LastName" type="text" placeholder="Last Name" />
+                <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+            </div>
+            <label style="margin-top:10px;"><b>User Type:</b></label>
+            <div class="input-group">
+                <select class="form-control" asp-for="editUser.UserType">
+                    <option>--Please Select--</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Moderator">Moderator</option>
+                    <option value="Admin">System Administrator</option>
+                </select>
+            </div>
+            <label style="margin-top:10px;"><b>User Name:</b></label>
+            <div class="input-group input-group-icon">
+                <input asp-for="editUser.UserName" type="text" placeholder="UserName" />
+                <div class="input-icon"><i class="fa fa-user"></i></div>
+            </div>
+            <input asp-for="editUser.Password" type="hidden" />
+            <input asp-for="editUser.Rating" type="hidden" />
+            <input asp-for="editUser.CreatedDate" type="hidden" />
+            <input asp-for="editUser.LastLogin" type="hidden" />
+        </div>
+        <button type="submit" class="button buttonBlue">
+            Save
+            <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+        </button>
+    </form>
+    @if (ViewData["Message"] != null)
+    {
+        <p class="text-success">@ViewData["Message"]&#33; <a asp-area="" asp-page="./Index">Back To Manage User</a></p>
+
+    }
+</div>
+@Html.AntiForgeryToken()

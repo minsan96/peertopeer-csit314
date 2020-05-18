@@ -1,0 +1,124 @@
+﻿@page
+@model FrontEnd.Pages.ViewProfileModel
+@{
+    ViewData["Title"] = "View Profile";
+}
+
+<h1>View Profile</h1>
+
+
+@section scripts
+    {
+    <link rel="stylesheet" href="~/css/signup.css" />
+}
+
+<div class="signupcontainer">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div style="width:100%">
+            <h4>Account</h4>
+        </div>
+        <input asp-for="editUser.ID" type="hidden" />
+        <label style="margin-top:10px;"><b>First Name:</b></label>
+        <div class="input-group input-group-icon">
+            <input asp-for="editUser.FirstName" type="text" placeholder="First Name" disabled/>
+            <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+        </div>
+        <label style="margin-top:10px;"><b>Last Name:</b></label>
+        <div class="input-group input-group-icon">
+            <input asp-for="editUser.LastName" type="text" placeholder="Last Name" disabled/>
+            <div class="input-icon"><i class="fa fa-user-plus"></i></div>
+        </div>
+        <label style="margin-top:10px;"><b>Rating:</b></label>
+        <div class="input-group input-group-icon">
+            <input asp-for="editUser.Rating" type="text" placeholder="UserName" disabled/>
+            <div class="input-icon"><i class="fa fa-user"></i></div>
+        </div>
+        <label style="margin-top:10px;"><b>Last Login:</b></label>
+        <div class="input-group input-group-icon">
+            <input asp-for="editUser.LastLogin" type="text" placeholder="UserName" disabled/>
+            <div class="input-icon"><i class="fa fa-user"></i></div>
+        </div>
+    </div>
+</div>
+<hr />
+<h4>Questions</h4>
+<table class="table" style="margin-top:15px;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Question)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Questions)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td><a asp-page="/QPages/Details" asp-route-id="@item.ID">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<h4>Answers</h4>
+<table class="table" style="margin-top:15px;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers[0].CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item2 in Model.Answers)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item2.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item2.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item2.CreatedDate)
+                </td>
+                <td>
+                    <a asp-page="/QPages/Details" asp-route-id="@item2.QuestionID">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.AntiForgeryToken()

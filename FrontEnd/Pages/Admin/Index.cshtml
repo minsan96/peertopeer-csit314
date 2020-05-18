@@ -4,7 +4,16 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 @section scripts
-{
+    { 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" />
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#admintable').DataTable();
+        });
+    </script>
     <link rel="stylesheet" href="~/css/admindashboard.css" />
     <link rel="stylesheet" href="~/css/adminmain.css" />
     <script type="text/javascript">
@@ -20,94 +29,94 @@
     </script>
 }
 
-    <form method="get">
-        <h1 class="column h6 color_label">Dashboard</h1>
-        <section class="wrapper">
-            <div class="row card_row">
-                <div class="column whole">
-                    <article class="card box_panel">
-                        <label class="card_label">
-                            Most Rated Users of the Week
-                        </label>
-                        <section class="card_body">
-                            @{ int i = 1;}
-                            @foreach (var item in Model._mostratedusers)
-                            {
-                                <h5>@i . @item.FirstName @item.LastName <span class="badge badge-primary float-right">@item.Rating</span></h5>
-                                i++;
-                            }
-                        </section>
-                    </article>
-                </div>
+<form method="get">
+    <h1 class="column h6 color_label">Dashboard</h1>
+    <section class="wrapper">
+        <div class="row card_row">
+            <div class="column whole">
+                <article class="card box_panel">
+                    <label class="card_label">
+                        Most Rated Users of the Week
+                    </label>
+                    <section class="card_body">
+                        @{ int i = 1;}
+                        @foreach (var item in Model._mostratedusers)
+                        {
+                            <a asp-page="/ViewProfile" asp-route-id="@item.ID"><h5>@i . @item.FirstName @item.LastName <span class="badge badge-primary float-right">@item.Rating</span></h5></a>
+                            i++;
+                        }
+                    </section>
+                </article>
             </div>
-        </section>
-        <label>
-            User List
-        </label>
-        <button type="button" class="btn btn-light" onclick="location.href = '/Admin/CreateUser'">Create User</button>
-        <table class="table">
-            <thead>
+        </div>
+    </section>
+    <label>
+        User List
+    </label>
+    <button type="button" class="btn btn-light" onclick="location.href = '/Admin/CreateUser'">Create User</button>
+    <table id="admintable" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].UserType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].Rating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model._userList[0].LastLogin)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model._userList)
+            {
+
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].UserName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].UserType)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].Rating)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].CreatedDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model._userList[0].LastLogin)
-                    </th>
-                    <th></th>
-                    <th></th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastLogin)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a>&nbsp;|&nbsp;
+                        <a asp-page="/ViewProfile" asp-route-id="@item.ID">View</a>&nbsp;|&nbsp;
+                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>&nbsp;|&nbsp;
+                        <a asp-page="./ChangePassword" asp-route-id="@item.ID">Change Password</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model._userList)
-                {
+            }
+        </tbody>
+    </table>
 
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserType)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Rating)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastLogin)
-                        </td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a>
-                        </td>
-                        <td>
-                            <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-    </form>
+</form>
+@Html.AntiForgeryToken()

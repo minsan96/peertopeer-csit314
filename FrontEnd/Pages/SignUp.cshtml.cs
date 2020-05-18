@@ -26,26 +26,47 @@ namespace FrontEnd.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var firstname = User.FirstName;
-            var lastname = User.LastName;
-            var username = User.UserName;
-            var password = User.Password;
-            User.UserType = "Normal";
-            User.ID = 0;
-            User.Rating = 0;
+            try
+            {
+                var firstname = User.FirstName;
+                var lastname = User.LastName;
+                var username = User.UserName;
+                var password = User.Password;
+                User.UserType = "Normal";
+                User.ID = 0;
+                User.Rating = 0;
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Attempt");
-                return Page();
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                    return Page();
+                }
+                if (User == null || string.IsNullOrEmpty(User.UserName) || string.IsNullOrEmpty(User.FirstName) || string.IsNullOrEmpty(User.LastName) || string.IsNullOrEmpty(User.Password))
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                    return Page();
+                }
+                var login = await _apiClient.CreateUsers(User);
+                ViewData["Message"] = "Sign Up Success";
             }
-            if (User == null || string.IsNullOrEmpty(User.UserName) || string.IsNullOrEmpty(User.FirstName) || string.IsNullOrEmpty(User.LastName) || string.IsNullOrEmpty(User.Password))
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Invalid Attempt");
-                return Page();
+                if (ex.Message.Contains("400"))
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt.");
+                    return Page();
+                }
+                else if (ex.Message.Contains("404"))
+                {
+                    ModelState.AddModelError(string.Empty, "This user does not exist.");
+                    return Page();
+                }
+                else if (ex.Message.Contains("500"))
+                {
+                    ModelState.AddModelError(string.Empty, "Internal Server Error.");
+                    return Page();
+                }
             }
-            var login = await _apiClient.CreateUsers(User);
-            ViewData["Message"] = "Sign Up Success";
             return Page();
         }
     }

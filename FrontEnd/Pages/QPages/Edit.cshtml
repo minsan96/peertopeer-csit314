@@ -18,6 +18,9 @@
                 <input asp-for="Questions.Description" class="form-control" />
                 <span asp-validation-for="Questions.Description" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Questions.Rating" class="form-control" />
+            <input type="hidden" asp-for="Questions.CreatedBy" class="form-control" />
+            <input type="hidden" asp-for="Questions.CreatedDate" class="form-control" />
             <!--
             <div class="form-group">
                 <label asp-for="Questions.Rating" class="control-label"></label>

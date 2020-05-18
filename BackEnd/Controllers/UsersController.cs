@@ -62,7 +62,15 @@ namespace BackEnd.Controllers
 
             users.Password = GetPassword(id);
 
-            _context.Entry(users).State = EntityState.Modified;
+            Users update = await _context.Users.FindAsync(id);
+            update.FirstName = users.FirstName;
+            update.LastName = users.LastName;
+            update.UserType = users.UserType;
+            update.Password = users.Password;
+            update.UserName = users.UserName;
+            update.Rating = users.Rating;
+
+            _context.Entry(update).State = EntityState.Modified;
 
             try
             {
@@ -164,6 +172,39 @@ namespace BackEnd.Controllers
             }
 
             return users;
+        }
+
+        // PUT: api/Users/5
+        [HttpPut("{id}/{password}/changepassword")]
+        public async Task<IActionResult> ChangePassword(int id, string password)
+        {
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            users.Password = hasher.HashPassword(users, password);
+
+            _context.Entry(users).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsersExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         private bool UsersExists(int id)

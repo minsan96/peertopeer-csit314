@@ -27,7 +27,7 @@ namespace FrontEnd.Pages
         public List<Questions> _mostratedqn2 { get; set; }
 
         [BindProperty]
-        public List<Answers> _mostratedans1 { get; set; }
+        public List<Questions> _mostratedqn3 { get; set; }
 
         [BindProperty]
         public List<Answers> _mostratedans2 { get; set; }
@@ -47,7 +47,7 @@ namespace FrontEnd.Pages
 
             _mostratedqn1 = await _apiClient.GetTopRatedQuestions();
             _mostratedqn2 = await _apiClient.GetTopRatedQuestions(5, 30);
-            _mostratedans1 = await _apiClient.GetTopRatedAnswers();
+            _mostratedqn3 = await _apiClient.GetTopRatedQuestions(5, 0);
             _mostratedans2 = await _apiClient.GetTopRatedAnswers(5, 30);
 
             _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);

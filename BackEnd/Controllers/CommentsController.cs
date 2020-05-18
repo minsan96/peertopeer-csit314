@@ -78,7 +78,10 @@ namespace BackEnd.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(comments).State = EntityState.Modified;
+            var update = await _context.Comments.FindAsync(id);
+            update.Description = comments.Description;
+            update.Rating = comments.Rating;
+            _context.Entry(update).State = EntityState.Modified;
 
             try
             {
@@ -127,8 +130,8 @@ namespace BackEnd.Controllers
         }
 
         // PUT: api/Comments/5/upvote
-        [HttpPut("{id}/upvote")]
-        public async Task<IActionResult> UpvoteComments(int id)
+        [HttpPut("{id}/{downvote}/upvote")]
+        public async Task<IActionResult> UpvoteComments(int id, bool downvote)
         {
             var comments = await _context.Comments.FindAsync(id);
             if (comments == null)
@@ -140,13 +143,26 @@ namespace BackEnd.Controllers
                 return BadRequest();
             }
 
-            comments.Rating = comments.Rating + 1;
-
+            if (downvote)
+            {
+                comments.Rating = comments.Rating - 1;
+            }
+            else
+            {
+                comments.Rating = comments.Rating + 1;
+            }
             _context.Entry(comments).State = EntityState.Modified;
 
             var userid = comments.CreatedBy;
-            var users = await _context.Users.FindAsync(userid);
-            users.Rating = users.Rating + 1;
+            var users = await _context.Users.FindAsync(userid);            
+            if (downvote)
+            {
+                users.Rating = users.Rating - 1;
+            }
+            else
+            {
+                users.Rating = users.Rating + 1;
+            }
             _context.Entry(users).State = EntityState.Modified;
 
             try

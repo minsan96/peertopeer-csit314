@@ -1,0 +1,254 @@
+﻿.upp-comments {
+    margin: 40px 0
+}
+
+.upp-comment {
+    margin: 40px 0;
+}
+
+.upp-comments > .upp-comment {
+}
+
+.upp-com-auth {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 20px 0;
+}
+
+    .upp-com-auth .img-person,
+    .upp-com-auth-name,
+    .upp-com-auth-ts {
+        margin-right: 15px;
+    }
+
+.upp-com-auth-ts {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.upp-com-replies {
+    border-left: 2px solid #dedede;
+    padding: 0 0 0 25px;
+    margin: 20px 0 0 40px;
+}
+
+
+/* Comment Box */
+
+.upp-comment-box {
+    padding-top: 10px;
+    display: flex;
+}
+
+.upp-comment-box-avatar {
+    min-width: 64px;
+}
+
+    .upp-comment-box-avatar img,
+    .upp-comment-box-avatar a {
+        padding: 0;
+    }
+
+    .upp-comment-box-avatar img {
+        width: 46px;
+        height: 46px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 5px 15px 0 0;
+    }
+
+.upp-comment-box-comm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dedede
+}
+
+.upp-comment-box-comm-ent {
+    width: 100%
+}
+
+.upp-comment-box-comm-ent-ta {
+    width: 100%;
+    min-height: 50px;
+    max-height: 100px;
+    cursor: text;
+    box-sizing: border-box;
+    border-radius: 0;
+    line-height: 1.25rem;
+    padding: 15px;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+}
+
+    .upp-comment-box-comm-ent-ta:focus {
+        resize: none;
+        outline: none;
+        border: none;
+        box-shadow: none;
+    }
+
+.upp-comment-box-comm-actions {
+    width: 100%;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.upp-comment-box-comm-actions-meta {
+    padding: 5px 10px;
+    color: #777;
+}
+
+.upp-comment-box-comm-word-count {
+    font-size: 0.9rem;
+    padding-right: 10px;
+}
+
+.upp-comment-box-comm-actions-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 10px;
+}
+
+.upp-img-person {
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+    min-height: 15px;
+    border-radius: 50%;
+    object-fit: cover !important;
+    margin-right: 10px;
+}
+
+.upp-btn {
+    background: #0190D4;
+    color: #FFF;
+    padding: 5px 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .upp-btn:hover {
+        opacity: 0.9;
+    }
+
+.upp-small {
+    font-size: 0.9rem;
+}
+
+
+.roundrect .up {
+  border-radius: 2rem 2rem 0 0;
+}
+.roundrect .down {
+  border-radius: 0 0 2rem 2rem;
+}
+.roundrect .count {
+  border-radius: .5rem .5rem;
+}
+
+.chev .up {
+  border-radius: 50% 50% 0 0;
+}
+.chev .down {
+  border-radius: 0 0 50% 50%;
+}
+.chev .count {
+  border-radius: 100%/50%;
+}
+
+.circle .up {
+  border-radius: 10rem 10rem 0 0;
+}
+.circle .down {
+  border-radius: 0 0 10rem 10rem;
+}
+.circle .count {
+  border-radius: 50%;
+}
+
+.vote {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  font-family: "Noto Sans";
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  margin: 1rem;
+}
+
+.increment {
+  -webkit-box-flex: 1;
+          flex: 1 0 0;
+  text-align: center;
+  opacity: .5;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.increment.up {
+  background: #4BC35F;
+  height: 50%;
+  margin-bottom: 0.25rem;
+}
+.increment.down {
+  background: #C15044;
+  height: 50%;
+}
+.increment:hover {
+  opacity: 1;
+}
+
+.count {
+  position: absolute;
+  top: 0;
+  border-radius: 0.1rem;
+  margin: 2.5rem;
+  background: #F6F3E4;
+  width: 5rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 5rem;
+  text-align: center;
+  box-shadow: 0 0 0 0.5rem #F6F3E4;
+  pointer-events: none;
+}
+.count.upvoted {
+  color: #4BC35F;
+}
+.count.downvoted {
+  color: #C15044;
+}
+
+.bump {
+  -webkit-animation: bump 200ms;
+          animation: bump 200ms;
+}
+
+@-webkit-keyframes bump {
+  30% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+  }
+}
+
+@keyframes bump {
+  30% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+  }
+}
+* {
+  box-sizing: border-box;
+}

@@ -31,22 +31,27 @@
     </script>
 }
 
-<h1>Sign Up</h1>
+<h1>Create User</h1>
 
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="signupcontainer">
         <div class="row">
-            <h4>Account</h4>
+            <div style="width:100%">
+                <h4>Account</h4>
+            </div>
+            <label style="margin-top:10px;"><b>First Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="_currentUser.FirstName" type="text" placeholder="First Name" />
                 <div class="input-icon"><i class="fa fa-user-plus"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>Last Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="_currentUser.LastName" type="text" placeholder="Last Name" />
                 <div class="input-icon"><i class="fa fa-user-plus"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>User Type:</b></label>
             <div class="input-group">
                 <select class="form-control" asp-for="_currentUser.UserType">
                     <option selected>--Please Select--</option>
@@ -55,17 +60,19 @@
                     <option value="Admin">System Administrator</option>
                 </select>
             </div>
+            <label style="margin-top:10px;"><b>User Name:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="_currentUser.UserName" type="text" placeholder="UserName" />
                 <div class="input-icon"><i class="fa fa-user"></i></div>
             </div>
+            <label style="margin-top:10px;"><b>Password:</b></label>
             <div class="input-group input-group-icon">
                 <input asp-for="_currentUser.Password" type="password" placeholder="Password" />
                 <div class="input-icon"><i class="fa fa-key"></i></div>
             </div>
         </div>
         <button type="submit" class="button buttonBlue">
-            Sign Up
+            Create User
             <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
         </button>
         @if (ViewData["Message"] != null)

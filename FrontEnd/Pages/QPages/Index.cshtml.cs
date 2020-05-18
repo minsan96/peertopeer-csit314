@@ -29,9 +29,13 @@ namespace FrontEnd.Pages.QPages
         [BindProperty]
         public IList<Questions> Questions { get;set; }
 
+        [BindProperty]
+        public IList<Answers> Answers { get; set; }
+
         public Users SingleUser { get; set; }
 
         public List<string> CreatorNames = new List<string>();
+        public List<string> CreatorNames2 = new List<string>();
 
         public async Task OnGet()
         {
@@ -54,8 +58,33 @@ namespace FrontEnd.Pages.QPages
                 int userid = q.CreatedBy;
                 var tempUser = await _apiClient.GetUsers(userid);
                 SingleUser = tempUser;
-                string name = SingleUser.FirstName + " " + SingleUser.LastName;
+                string name = string.Empty;
+                if (SingleUser == null || SingleUser.ID == 0)
+                {
+                    name = "Deleted User";
+                }
+                else
+                {
+                    name = SingleUser.FirstName + " " + SingleUser.LastName;
+                }
                 CreatorNames.Add(name);
+            }
+            Answers = await _apiClient.GetAnswers();
+            foreach (Answers q in Answers)
+            {
+                int userid = q.CreatedBy;
+                var tempUser = await _apiClient.GetUsers(userid);
+                SingleUser = tempUser;
+                string name = string.Empty;
+                if (SingleUser == null || SingleUser.ID == 0)
+                {
+                    name = "Deleted User";
+                }
+                else
+                {
+                    name = SingleUser.FirstName + " " + SingleUser.LastName;
+                }
+                CreatorNames2.Add(name);
             }
         }
 
