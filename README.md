@@ -7,6 +7,7 @@ Prerequisites
 2. IIS must be enabled in your machine (if you are not using Visual Studio). 
 3. Microsft SQL Server and the Management Studio
 4. If you are opening the project in Visual Studio, make sure the NuGet packages are restored correctly.
+5. Recommended Operating System: Windows because of IIS. 
 
 * If you do not have Visual Studio but wish to view/test the app, please request someone who has Visual Studio to build and generate you a package to be configured into IIS. 
 
