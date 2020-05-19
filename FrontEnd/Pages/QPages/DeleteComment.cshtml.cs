@@ -10,16 +10,16 @@ using PeerToPeerDTO;
 
 namespace FrontEnd.Pages.QPages
 {
-    public class DeleteAnswerModel : PageModel
+    public class DeleteCommentModel : PageModel
     {
         protected readonly IApiClient _apiClient;
-        public DeleteAnswerModel(IApiClient apiClient)
+        public DeleteCommentModel(IApiClient apiClient)
         {
             _apiClient = apiClient;
         }
 
         [BindProperty]
-        public Answers Answers { get; set; }
+        public Comments Comments { get; set; }
 
         public Users _currentUser { get; set; }
 
@@ -36,9 +36,9 @@ namespace FrontEnd.Pages.QPages
             }
 
             _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
-            Answers = await _apiClient.GetAnswers(id);
+            Comments = await _apiClient.GetComments(id);
 
-            if (_currentUser.UserType != "Moderator" && Answers.CreatedBy != _currentUser.ID)
+            if (_currentUser.UserType != "Moderator" && Comments.CreatedBy != _currentUser.ID)
             {
                 return RedirectToPage("./Index");
             }
@@ -51,7 +51,7 @@ namespace FrontEnd.Pages.QPages
             {
                 return Page();
             }
-            if (Answers.ID == 0)
+            if (Comments.ID == 0)
             {
                 ModelState.AddModelError(string.Empty, "Invalid Attempt.");
                 return Page();
@@ -59,13 +59,13 @@ namespace FrontEnd.Pages.QPages
 
             try
             {
-                await _apiClient.DeleteAnswers(Answers.ID);
+                await _apiClient.DeleteComments(Comments.ID);
             }
             catch (Exception ex)
             {
                 if (ex.Message.Contains("404"))
                 {
-                    ModelState.AddModelError(string.Empty, "This answer does not exist.");
+                    ModelState.AddModelError(string.Empty, "This comment does not exist.");
                     return Page();
                 }
                 else

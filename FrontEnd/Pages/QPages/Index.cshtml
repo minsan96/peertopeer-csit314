@@ -84,7 +84,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Answers[0].Description)
+                Answer
+            </th>
+            <th>
+                Question
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Answers[0].Rating)
@@ -106,6 +109,9 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.QuestionNames[j])
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Rating)

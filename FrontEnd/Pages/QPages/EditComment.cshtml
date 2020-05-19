@@ -1,0 +1,37 @@
+﻿@page
+@model FrontEnd.Pages.QPages.EditCommentModel
+@{
+    ViewData["Title"] = "EditComment";
+}
+
+<h4>Edit Comment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Comments.ID" />
+            <input type="hidden" asp-for="Comments.AnswerID" />
+            <div class="form-group">
+                <label asp-for="Comments.Description" class="control-label"></label>
+                <input asp-for="Comments.Description" class="form-control" />
+                <span asp-validation-for="Comments.Description" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Comments.Rating" class="form-control" />
+            <input type="hidden" asp-for="Comments.CreatedBy" class="form-control" />
+            <input type="hidden" asp-for="Comments.CreatedDate" class="form-control" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (ViewData["Message"] != null)
+{
+    <p class="text-success">@ViewData["Message"]</p>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

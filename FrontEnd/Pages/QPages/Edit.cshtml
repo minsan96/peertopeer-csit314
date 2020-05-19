@@ -1,7 +1,7 @@
 ﻿@page
 @model FrontEnd.Pages.QPages.EditModel
 
-<h4>Questions</h4>
+<h4>Edit Question</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -46,9 +46,10 @@
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+@if (ViewData["Message"] != null)
+{
+    <p class="text-success">@ViewData["Message"]</p>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

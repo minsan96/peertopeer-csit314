@@ -212,7 +212,8 @@
     </dl>
 </div>  
 <div>
-    <span class="upp-com-auth-ts">Posted by 
+    <span class="upp-com-auth-ts">
+        Posted by
         @for (int i = 0; i < Model.userlist.Count(); i++)
         {
             string name = Model.userlist[i].FirstName + " " + Model.userlist[i].LastName;
@@ -222,6 +223,10 @@
             }
         } on @Model.Questions.CreatedDate
     </span>
+    @if (Model._currentUser.UserType == "Moderator" || Model.Questions.CreatedBy == Model._currentUser.ID)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Questions.ID" style="float:right;">Edit Question</a>
+    }
 </div>
 <br />
 <div class="bigcontainer">
@@ -274,7 +279,14 @@
                     {
                         <i class="fa fa-check" style="font-size:2em; color:#29ff02" aria-hidden="true"></i>
                     }
-                    <a href='javascript:showcomment("@commentdivid")' style="float:right;">Post Comment</a>
+                    <div style="float:right;">
+                        <a href='javascript:showcomment("@commentdivid")'>Post Comment</a>
+                        @if (Model._currentUser.UserType == "Moderator" || item.CreatedBy == Model._currentUser.ID)
+                        {
+                            <a asp-page="./EditAnswer" style="margin-left:10px;" asp-route-id="@item.ID">Edit Answer</a>
+                            <a asp-page="./DeleteAnswer" style="margin-left:10px;" asp-route-id="@item.ID">Delete Answer</a>
+                        }
+                    </div>
                 </div>
                 <div class="upp-com-content">
                     <div class="upp-com-replies" style="margin-left: 6rem;">
@@ -307,6 +319,13 @@
                                         <p style="margin-left: 4rem;">
                                             @Html.DisplayFor(modelItem => item2.Description)
                                         </p>
+                                    </div>
+                                    <div style="float:right;">
+                                        @if (Model._currentUser.UserType == "Moderator" || item2.CreatedBy == Model._currentUser.ID)
+                                        {
+                                            <a asp-page="./EditComment" asp-route-id="@item2.ID">Edit Comment</a>
+                                            <a asp-page="./DeleteComment" style="margin-left:10px;" asp-route-id="@item2.ID">Delete Comment</a>
+                                        }
                                     </div>
                                 </div>
                             }

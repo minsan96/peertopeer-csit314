@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FrontEnd.Models;
 using PeerToPeerDTO;
+using Newtonsoft.Json;
 
 namespace FrontEnd.Pages.QPages
 {
@@ -23,6 +24,8 @@ namespace FrontEnd.Pages.QPages
         [BindProperty]
         public Questions Questions { get; set; }
 
+        public Users _currentUser { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -30,7 +33,18 @@ namespace FrontEnd.Pages.QPages
                 return NotFound();
             }
 
+            if (Request.Cookies["CurrentUser"] == null || string.IsNullOrEmpty(Request.Cookies["CurrentUser"]))
+            {
+                return RedirectToPage("./Index");
+            }
+
             Questions = await _context.Questions.FirstOrDefaultAsync(m => m.ID == id);
+            _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
+
+            if (_currentUser.UserType != "Moderator" && Questions.CreatedBy != _currentUser.ID)
+            {
+                return RedirectToPage("./Index");
+            }
 
             if (Questions == null)
             {
@@ -64,7 +78,8 @@ namespace FrontEnd.Pages.QPages
                 }
             }
 
-            return RedirectToPage("./Index");
+            ViewData["Message"] = "Edit Success";
+            return Page();
         }
 
         private bool QuestionsExists(int id)

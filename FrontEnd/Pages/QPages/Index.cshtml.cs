@@ -36,6 +36,7 @@ namespace FrontEnd.Pages.QPages
 
         public List<string> CreatorNames = new List<string>();
         public List<string> CreatorNames2 = new List<string>();
+        public List<string> QuestionNames = new List<string>();
 
         public async Task OnGet()
         {
@@ -85,6 +86,18 @@ namespace FrontEnd.Pages.QPages
                     name = SingleUser.FirstName + " " + SingleUser.LastName;
                 }
                 CreatorNames2.Add(name);
+
+                var tempqn = await _apiClient.GetQuestions(q.QuestionID);
+                string qnname = string.Empty;
+                if (tempqn == null || tempqn.ID == 0)
+                {
+                    qnname = "Deleted Question";
+                }
+                else
+                {
+                    qnname = tempqn.Question;
+                }
+                QuestionNames.Add(qnname);
             }
         }
 

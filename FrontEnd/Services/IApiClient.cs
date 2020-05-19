@@ -31,9 +31,9 @@ namespace FrontEnd.Services
 
         Task<Answers> GetAnswers(int id);
 
-        Task PutAnswers(int id, Answers users);
+        Task PutAnswers(int id, Answers answer);
 
-        Task<bool> PostAnswers(Answers users);
+        Task<bool> PostAnswers(Answers answer);
 
         Task DeleteAnswers(int id);
 
