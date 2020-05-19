@@ -66,66 +66,74 @@ namespace FrontEnd.Pages.QPages
 
         public async Task<IActionResult> OnPostVotingAsync(int id, string type, string votetype)
         {
-            _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
-            if (votetype == "down")
+            try
             {
-                if(type == "Answer")
+                _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
+                if (votetype == "down")
                 {
-                    var answer = await _apiClient.GetAnswers(id);
-                    if(answer.CreatedBy == _currentUser.ID)
+                    if (type == "Answer")
                     {
-                        return new JsonResult("Error");
+                        var answer = await _apiClient.GetAnswers(id);
+                        if (answer.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteAnswers(id, true);
                     }
-                    var res = _apiClient.UpvoteAnswers(id, true);
+                    else if (type == "Comment")
+                    {
+                        var comment = await _apiClient.GetComments(id);
+                        if (comment.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteComments(id, true);
+                    }
+                    else if (type == "Question")
+                    {
+                        var question = await _apiClient.GetQuestions(id);
+                        if (question.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteQuestions(id, true);
+                    }
                 }
-                else if(type == "Comment")
+                else
                 {
-                    var comment = await _apiClient.GetComments(id);
-                    if (comment.CreatedBy == _currentUser.ID)
+                    if (type == "Answer")
                     {
-                        return new JsonResult("Error");
+                        var answer = await _apiClient.GetAnswers(id);
+                        if (answer.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteAnswers(id, false);
                     }
-                    var res = _apiClient.UpvoteComments(id, true);
-                }
-                else if(type == "Question")
-                {
-                    var question = await _apiClient.GetQuestions(id);
-                    if (question.CreatedBy == _currentUser.ID)
+                    else if (type == "Comment")
                     {
-                        return new JsonResult("Error");
+                        var comment = await _apiClient.GetComments(id);
+                        if (comment.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteComments(id, false);
                     }
-                    var res = _apiClient.UpvoteQuestions(id, true);
+                    else if (type == "Question")
+                    {
+                        var question = await _apiClient.GetQuestions(id);
+                        if (question.CreatedBy == _currentUser.ID)
+                        {
+                            return new JsonResult("Error");
+                        }
+                        var res = _apiClient.UpvoteQuestions(id, false);
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (type == "Answer")
-                {
-                    var answer = await _apiClient.GetAnswers(id);
-                    if (answer.CreatedBy == _currentUser.ID)
-                    {
-                        return new JsonResult("Error");
-                    }
-                    var res = _apiClient.UpvoteAnswers(id, false);
-                }
-                else if (type == "Comment")
-                {
-                    var comment = await _apiClient.GetComments(id);
-                    if (comment.CreatedBy == _currentUser.ID)
-                    {
-                        return new JsonResult("Error");
-                    }
-                    var res = _apiClient.UpvoteComments(id, false);
-                }
-                else if (type == "Question")
-                {
-                    var question = await _apiClient.GetQuestions(id);
-                    if (question.CreatedBy == _currentUser.ID)
-                    {
-                        return new JsonResult("Error");
-                    }
-                    var res = _apiClient.UpvoteQuestions(id, false);
-                }
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
             }
             return new JsonResult("voted");
         }
@@ -145,7 +153,15 @@ namespace FrontEnd.Pages.QPages
             postanswer.CreatedBy = _currentUser.ID;
             postanswer.Rating = 0;
 
-            var post = await _apiClient.PostAnswers(postanswer);
+            try
+            {
+                var post = await _apiClient.PostAnswers(postanswer);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
             return new JsonResult("Success");
         }
 
@@ -165,7 +181,15 @@ namespace FrontEnd.Pages.QPages
             postcomment.CreatedBy = _currentUser.ID;
             postcomment.Rating = 0;
 
-            var post = await _apiClient.PostComments(postcomment);
+            try
+            {
+                var post = await _apiClient.PostComments(postcomment);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
             return new JsonResult("Success");
         }
     }

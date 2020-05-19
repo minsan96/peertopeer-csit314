@@ -38,7 +38,7 @@ namespace FrontEnd.Pages.QPages
             _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
             Answers = await _apiClient.GetAnswers(id);
 
-            if (_currentUser.UserType != "Moderator" && Answers.CreatedBy != _currentUser.ID)
+            if (_currentUser.UserType != "Moderator")
             {
                 return RedirectToPage("./Index");
             }

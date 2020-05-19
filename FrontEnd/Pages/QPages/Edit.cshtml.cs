@@ -59,6 +59,11 @@ namespace FrontEnd.Pages.QPages
             {
                 return Page();
             }
+            if (string.IsNullOrEmpty(Questions.Question) || string.IsNullOrEmpty(Questions.Description))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
 
             _context.Attach(Questions).State = EntityState.Modified;
 

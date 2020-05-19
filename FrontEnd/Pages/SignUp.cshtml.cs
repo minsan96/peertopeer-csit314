@@ -51,19 +51,14 @@ namespace FrontEnd.Pages
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("400"))
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid Attempt.");
-                    return Page();
-                }
-                else if (ex.Message.Contains("404"))
-                {
-                    ModelState.AddModelError(string.Empty, "This user does not exist.");
-                    return Page();
-                }
-                else if (ex.Message.Contains("500"))
+                if (ex.Message.Contains("500"))
                 {
                     ModelState.AddModelError(string.Empty, "Internal Server Error.");
+                    return Page();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt.");
                     return Page();
                 }
             }

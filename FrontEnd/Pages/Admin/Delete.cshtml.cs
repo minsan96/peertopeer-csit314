@@ -47,8 +47,23 @@ namespace FrontEnd.Pages.Admin
                 return NotFound();
             }
 
-            await _apiClient.DeleteUsers(Users.ID);
-
+            try
+            {
+                await _apiClient.DeleteUsers(Users.ID);
+            }
+            catch(Exception ex)
+            {
+                if (ex.Message.Contains("404"))
+                {
+                    ModelState.AddModelError(string.Empty, "This user does not exist.");
+                    return Page();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt.");
+                    return Page();
+                }
+            }
             return RedirectToPage("./Index");
         }
     }

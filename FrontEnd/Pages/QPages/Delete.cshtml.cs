@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FrontEnd.Models;
 using PeerToPeerDTO;
+using Newtonsoft.Json;
 
 namespace FrontEnd.Pages.QPages
 {
@@ -22,11 +23,25 @@ namespace FrontEnd.Pages.QPages
         [BindProperty]
         public Questions Questions { get; set; }
 
+        public Users _currentUser { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (Request.Cookies["CurrentUser"] == null || string.IsNullOrEmpty(Request.Cookies["CurrentUser"]))
+            {
+                return RedirectToPage("./Index");
+            }
+
+            _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
+
+            if (_currentUser.UserType != "Moderator")
+            {
+                return RedirectToPage("./Index");
             }
 
             Questions = await _context.Questions.FirstOrDefaultAsync(m => m.ID == id);
@@ -47,12 +62,19 @@ namespace FrontEnd.Pages.QPages
 
             Questions = await _context.Questions.FindAsync(id);
 
-            if (Questions != null)
+            try
             {
-                _context.Questions.Remove(Questions);
-                await _context.SaveChangesAsync();
+                if (Questions != null)
+                {
+                    _context.Questions.Remove(Questions);
+                    await _context.SaveChangesAsync();
+                }
             }
-
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
             return RedirectToPage("./Index");
         }
     }

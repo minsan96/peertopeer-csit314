@@ -63,7 +63,23 @@ namespace FrontEnd.Pages.Admin
                 ModelState.AddModelError(string.Empty, "Invalid Attempt");
                 return Page();
             }
-            var login = await _apiClient.CreateUsers(_currentUser);
+            try
+            {
+                var login = await _apiClient.CreateUsers(_currentUser);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("500"))
+                {
+                    ModelState.AddModelError(string.Empty, "Internal Server Error.");
+                    return Page();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Attempt.");
+                    return Page();
+                }
+            }
             ViewData["Message"] = "Create User Success";
             return Page();
         }

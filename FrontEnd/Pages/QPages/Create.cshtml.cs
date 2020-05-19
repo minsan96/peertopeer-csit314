@@ -43,7 +43,7 @@ namespace FrontEnd.Pages.QPages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            
+
             if (!User.Identity.IsAuthenticated)
             {
                 // Home Page.  
@@ -58,6 +58,13 @@ namespace FrontEnd.Pages.QPages
 
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
+
+            if (string.IsNullOrEmpty(Questions.Question) || string.IsNullOrEmpty(Questions.Description))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
                 return Page();
             }
 
@@ -66,9 +73,16 @@ namespace FrontEnd.Pages.QPages
             Questions.CreatedBy = _currentUser.ID;
             Questions.Rating = 0;
 
-            _context.Questions.Add(Questions);
-            await _context.SaveChangesAsync();
-
+            try
+            {
+                _context.Questions.Add(Questions);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Attempt");
+                return Page();
+            }
             return RedirectToPage("./Index");
         }
     }

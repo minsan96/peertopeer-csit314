@@ -38,7 +38,7 @@ namespace FrontEnd.Pages.QPages
             _currentUser = JsonConvert.DeserializeObject<Users>(Request.Cookies["CurrentUser"]);
             Comments = await _apiClient.GetComments(id);
 
-            if (_currentUser.UserType != "Moderator" && Comments.CreatedBy != _currentUser.ID)
+            if (_currentUser.UserType != "Moderator")
             {
                 return RedirectToPage("./Index");
             }

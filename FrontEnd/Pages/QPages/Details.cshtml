@@ -74,43 +74,46 @@
             var txt = $(txtid).val();
             var params = (new URL(document.location)).searchParams;
             var qid = params.get("id");
-            $.ajax({
-                type: 'POST',
-                url: '/QPages/Details?handler=Answer&id=' + qid + '&answertext=' + txt,
-                success: function (data) {
-                    //success
-                    if (data.indexOf("Success") != -1) {
-                        window.location.reload(true);
+            if (currentusertype == "Normal") {
+                $.ajax({
+                    type: 'POST',
+                    url: '/QPages/Details?handler=Answer&id=' + qid + '&answertext=' + txt,
+                    success: function (data) {
+                        //success
+                        if (data.indexOf("Success") != -1) {
+                            window.location.reload(true);
+                        }
+                        else {
+                            alert("Error Posting Answer!");
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error: " + error);
                     }
-                    else {
-                        alert("Error Posting Answer!");
-                    }
-                },
-                error: function (error) {
-                    console.log("Error: " + error);
-                }
-            });
+                });
+            }
         }
         function postcomment(txtid, answerid) {
             var currentusertype = "@ViewData["CurrentUserType"]";
             var txt = $('#' + txtid).val();
-            if (currentusertype == "Normal") {}
-            $.ajax({
-                type: 'POST',
-                url: '/QPages/Details?handler=Comment&id=' + answerid + '&answertext=' + txt,
-                success: function (data) {
-                    //success
-                    if (data.indexOf("Success") != -1) {
-                        window.location.reload(true);
+            if (currentusertype == "Normal") {
+                $.ajax({
+                    type: 'POST',
+                    url: '/QPages/Details?handler=Comment&id=' + answerid + '&answertext=' + txt,
+                    success: function (data) {
+                        //success
+                        if (data.indexOf("Success") != -1) {
+                            window.location.reload(true);
+                        }
+                        else {
+                            alert("Error Posting Answer!");
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error: " + error);
                     }
-                    else {
-                        alert("Error Posting Answer!");
-                    }
-                },
-                error: function (error) {
-                    console.log("Error: " + error);
-                }
-            });
+                });
+            }
         }
         function showcomment(divid) {
             $('#' + divid).show();
@@ -223,6 +226,10 @@
             }
         } on @Model.Questions.CreatedDate
     </span>
+    @if (Model._currentUser.UserType == "Moderator")
+    {
+        <a asp-page="./Delete" asp-route-id="@Model.Questions.ID" style="float:right;margin-left:10px;">Delete Question</a>
+    }
     @if (Model._currentUser.UserType == "Moderator" || Model.Questions.CreatedBy == Model._currentUser.ID)
     {
         <a asp-page="./Edit" asp-route-id="@Model.Questions.ID" style="float:right;">Edit Question</a>
@@ -237,6 +244,10 @@
     {
         string upvoteid = "A" + item.ID.ToString();
         string child0 = "Child" + c.ToString();
+        if(c == 0 && item.Rating == 0)
+        {
+            child0 = "ChildX" + c.ToString();
+        }
         string commentdivid = "Comment" + c.ToString();
         string fullname = "Deleted User";
         string cfullname = "Deleted User";
@@ -275,7 +286,7 @@
                     <p style="margin-left: 3rem;">
                         @Html.DisplayFor(modelItem => item.Description)
                     </p>
-                    @if (c == 0)
+                    @if (c == 0 && item.Rating != 0)
                     {
                         <i class="fa fa-check" style="font-size:2em; color:#29ff02" aria-hidden="true"></i>
                     }
@@ -284,6 +295,9 @@
                         @if (Model._currentUser.UserType == "Moderator" || item.CreatedBy == Model._currentUser.ID)
                         {
                             <a asp-page="./EditAnswer" style="margin-left:10px;" asp-route-id="@item.ID">Edit Answer</a>
+                        }
+                        @if (Model._currentUser.UserType == "Moderator")
+                        {
                             <a asp-page="./DeleteAnswer" style="margin-left:10px;" asp-route-id="@item.ID">Delete Answer</a>
                         }
                     </div>
@@ -324,6 +338,9 @@
                                         @if (Model._currentUser.UserType == "Moderator" || item2.CreatedBy == Model._currentUser.ID)
                                         {
                                             <a asp-page="./EditComment" asp-route-id="@item2.ID">Edit Comment</a>
+                                        }
+                                        @if (Model._currentUser.UserType == "Moderator")
+                                        {
                                             <a asp-page="./DeleteComment" style="margin-left:10px;" asp-route-id="@item2.ID">Delete Comment</a>
                                         }
                                     </div>
