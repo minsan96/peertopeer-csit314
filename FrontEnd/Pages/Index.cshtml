@@ -86,7 +86,16 @@
                         @{ int i = 1;}
                         @foreach (var item in Model._mostratedqn1)
                         {
-                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@i . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            string question = string.Empty;
+                            if (item.Question.Length > 30)
+                            {
+                                question = item.Question.Substring(0, 30);
+                            }
+                            else
+                            {
+                                question = item.Question;
+                            }
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@i . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             i++;
                         }
                     </section>
@@ -101,7 +110,16 @@
                         @{ int j = 1;}
                         @foreach (var item in Model._mostratedqn2)
                         {
-                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@j . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            string question = string.Empty;
+                            if (item.Question.Length > 30)
+                            {
+                                question = item.Question.Substring(0, 30);
+                            }
+                            else
+                            {
+                                question = item.Question;
+                            }
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@j . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             j++;
                         }
                     </section>
@@ -116,7 +134,16 @@
                         @{ int k = 1;}
                         @foreach (var item in Model._mostratedqn3)
                         {
-                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@k . @item.Question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            string question = string.Empty;
+                            if (item.Question.Length > 30)
+                            {
+                                question = item.Question.Substring(0, 30);
+                            }
+                            else
+                            {
+                                question = item.Question;
+                            }
+                            <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@k . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             k++;
                         }
                     </section>
@@ -131,7 +158,16 @@
                         @{ int l = 1;}
                         @foreach (var item in Model._mostratedans2)
                         {
-                            <a asp-page="/QPages/Details" asp-route-id="@item.QuestionID"><h6>@l . @item.Description <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
+                            string answer = string.Empty;
+                            if (item.Description.Length > 30)
+                            {
+                                answer = item.Description.Substring(0, 30);
+                            }
+                            else
+                            {
+                                answer = item.Description;
+                            }
+                            <a asp-page="/QPages/Details" asp-route-id="@item.QuestionID"><h6>@l . @answer <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             l++;
                         }
                     </section>
