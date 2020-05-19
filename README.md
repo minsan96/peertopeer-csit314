@@ -8,6 +8,7 @@ Prerequisites
 3. Microsft SQL Server and the Management Studio
 4. If you are opening the project in Visual Studio, make sure the NuGet packages are restored correctly.
 5. Recommended Operating System: Windows because of IIS. 
+6. Please remember to modify connection strings in appsettings.json and appsettings.development.json in BOTH BackEnd and FrontEnd folders to your own Microsoft SQL Server configuration. 
 
 * If you do not have Visual Studio but wish to view/test the app, please request someone who has Visual Studio to build and generate you a package to be configured into IIS. 
 
