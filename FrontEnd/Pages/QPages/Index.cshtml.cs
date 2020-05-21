@@ -55,9 +55,11 @@ namespace FrontEnd.Pages.QPages
             Questions = await _context.Questions
                 .AsNoTracking()
                 .ToListAsync();
+            List<Users> userlist = await _apiClient.GetUsers();
+            List<Questions> qlist = await _apiClient.GetQuestions();
             foreach (Questions q in Questions){
                 int userid = q.CreatedBy;
-                var tempUser = await _apiClient.GetUsers(userid);
+                var tempUser = userlist.Where(e => e.ID == q.CreatedBy).FirstOrDefault();
                 SingleUser = tempUser;
                 string name = string.Empty;
                 if (SingleUser == null || SingleUser.ID == 0)
@@ -71,10 +73,11 @@ namespace FrontEnd.Pages.QPages
                 CreatorNames.Add(name);
             }
             Answers = await _apiClient.GetAnswers();
+
             foreach (Answers q in Answers)
             {
                 int userid = q.CreatedBy;
-                var tempUser = await _apiClient.GetUsers(userid);
+                var tempUser = userlist.Where(e => e.ID == q.CreatedBy).FirstOrDefault();
                 SingleUser = tempUser;
                 string name = string.Empty;
                 if (SingleUser == null || SingleUser.ID == 0)
@@ -87,7 +90,7 @@ namespace FrontEnd.Pages.QPages
                 }
                 CreatorNames2.Add(name);
 
-                var tempqn = await _apiClient.GetQuestions(q.QuestionID);
+                var tempqn = qlist.Where(e => e.ID == q.QuestionID).FirstOrDefault();
                 string qnname = string.Empty;
                 if (tempqn == null || tempqn.ID == 0)
                 {
