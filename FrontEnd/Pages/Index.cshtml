@@ -89,11 +89,11 @@
                             string question = string.Empty;
                             if (item.Question.Length > 30)
                             {
-                                question = item.Question.Substring(0, 30);
+                                question = item.Description.Substring(0, 30);
                             }
                             else
                             {
-                                question = item.Question;
+                                question = item.Description;
                             }
                             <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@i . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             i++;
@@ -113,11 +113,11 @@
                             string question = string.Empty;
                             if (item.Question.Length > 30)
                             {
-                                question = item.Question.Substring(0, 30);
+                                question = item.Description.Substring(0, 30);
                             }
                             else
                             {
-                                question = item.Question;
+                                question = item.Description;
                             }
                             <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@j . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             j++;
@@ -137,11 +137,11 @@
                             string question = string.Empty;
                             if (item.Question.Length > 30)
                             {
-                                question = item.Question.Substring(0, 30);
+                                question = item.Description.Substring(0, 30);
                             }
                             else
                             {
-                                question = item.Question;
+                                question = item.Description;
                             }
                             <a asp-page="/QPages/Details" asp-route-id="@item.ID"><h6>@k . @question <span class="badge badge-primary float-right">@item.Rating</span></h6></a>
                             k++;
